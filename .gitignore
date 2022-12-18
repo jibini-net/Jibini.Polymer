@@ -20,7 +20,3 @@
 **/*.out
 **/*.a
 **/*.so
-
-# Flex and Bison generated lexer/parser source output
-/Jibini.Polymer.Grammar/lexer/lexer.c
-/Jibini.Polymer.Grammar/parser/parser.c

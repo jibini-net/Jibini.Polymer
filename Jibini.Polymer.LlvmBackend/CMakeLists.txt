@@ -9,6 +9,7 @@ add_executable(Jibini.Polymer.LlvmBackend "Jibini.Polymer.LlvmBackend.cpp"
 
 target_link_libraries(Jibini.Polymer.LlvmBackend Jibini.Polymer.Shared)
 
+set_property(TARGET Jibini.Polymer.LlvmBackend PROPERTY C_STANDARD 17)
 set_property(TARGET Jibini.Polymer.LlvmBackend PROPERTY CXX_STANDARD 20)
 
 # Included from the LLVM documentation for CMake projects.

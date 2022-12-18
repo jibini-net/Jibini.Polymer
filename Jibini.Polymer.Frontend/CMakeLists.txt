@@ -9,4 +9,5 @@ add_executable(Jibini.Polymer.Frontend "Jibini.Polymer.Frontend.c"
 
 target_link_libraries(Jibini.Polymer.Frontend Jibini.Polymer.Shared)
 
+set_property(TARGET Jibini.Polymer.Frontend PROPERTY C_STANDARD 17)
 set_property(TARGET Jibini.Polymer.Frontend PROPERTY CXX_STANDARD 20)

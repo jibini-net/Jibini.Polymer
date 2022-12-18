@@ -7,4 +7,5 @@ cmake_minimum_required(VERSION 3.8)
 add_library(Jibini.Polymer.Shared STATIC "Jibini.Polymer.Shared.c"
     "Jibini.Polymer.Shared.h")
 
+set_property(TARGET Jibini.Polymer.Shared PROPERTY C_STANDARD 17)
 set_property(TARGET Jibini.Polymer.Shared PROPERTY CXX_STANDARD 20)
