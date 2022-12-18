@@ -1,9 +1,3 @@
-# CMakeList.txt: CMake project for Jibini.Polymer.Grammar, include source and
-# define project specific logic here.
-#
-cmake_minimum_required(VERSION 3.8)
-
-# Included from the CMake docs for finding Flex.
 ## Copyright (c) 2022 Zach Goethel
 ## 
 ## Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,6 +18,12 @@ cmake_minimum_required(VERSION 3.8)
 ## FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 ## IN THE SOFTWARE.
 
+# CMakeList.txt: CMake project for Jibini.Polymer.Grammar, include source and
+# define project specific logic here.
+#
+cmake_minimum_required(VERSION 3.8)
+
+# Included from the CMake docs for finding Flex.
 # Find it here: https://cmake.org/cmake/help/latest/module/FindFLEX.html
 #
 file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/lexer/")
