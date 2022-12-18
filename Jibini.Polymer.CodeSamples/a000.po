@@ -1,0 +1,54 @@
+interface IXy<T : Number>
+{
+    var x, y: T;
+};
+
+type Xy<T : Number> : IXy<T>;
+
+interface IRegion<T : Number>
+{
+    var base: Xy<T>;
+    var width, height: T;
+};
+
+type Region<T : Number> : IRegion<T>;
+
+fun IRegion<T>::center<T : Number>(): Xy<T>
+{
+    // this: IRegion<T> &
+    return Xy(this.base.x + this.width / 2);
+}
+
+type QuadNode<T: Number>(Xy<T> base, T size)
+{
+    var *children: QuadNode<T>;
+    children = { 0 };
+
+public:
+    fun branch()
+    {
+        children = buffer<QuadNode<T>>(4, null);
+    }
+
+public:
+    fun intersects(&region: IRegion<T>): Bool
+    {
+        
+    }
+
+    fun insert(&region: IRegion<T>, *elem: Object): Bool
+    {
+        
+    }
+
+    fun search(&region: IRegion<T>, cb: Bool(Region *))
+    {
+        
+    }
+};
+
+fun main(): Int
+{
+    final var node0: quad_node_t = { 0 };
+    final var node1 = quad_node_t({ 0, 0 }, 32);
+}
