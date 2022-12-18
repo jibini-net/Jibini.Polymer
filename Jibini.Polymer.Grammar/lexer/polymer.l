@@ -28,16 +28,66 @@ letter [A-Za-z]
 digit [0-9]
 
 %%
-var                         { return VAR; }
-[ ]                         {  }
-\t                          {  }
-\r                          {  }
-\n                          {  }
-.                           {
+var                             { return VAR; }
+if                              { return IF; }
+else                            { return ELSE; }
+while                           { return WHILE; }
+for                             { return FOR; }
+do                              { return DO; }
+select|SELECT                   { return SELECT; }
+from|FROM                       { return FROM; }
+where|WHERE                     { return WHERE; }
+in|IN                           { return IN; }
+fun                             { return FUN; }
+return                          { return RETURN; }
+new                             { return NEW; }
+type                            { return TYPE; }
+interface                       { return INTERFACE; }
+public                          { return PUBLIC; }
+private                         { return PRIVATE; }
+final                           { return FINAL; }
+buffer                          { return BUFFER; }
+_*{letter}({letter}|{digit}|_)* { return IDENT; }
+{digit}{digit}*                 { return INT_LIT; }
+\"(\\.|[^"\\])*\"               { return STR_LIT; }
+\<                              { return LT; }
+\<\=                            { return LTE; }
+\>                              { return GT; }
+\>\=                            { return GTE; }
+\!\=                            { return N_EQUALS; }
+\&\&                            { return AND; }
+\|\|                            { return OR; }
+\=\=                            { return EQUALS; }
+\-\>                            { return PTR; }
+\=                              { return '='; }
+\+                              { return '+'; }
+\*                              { return '*'; }
+\;                              { return ';'; }
+\(                              { return '('; }
+\)                              { return ')'; }
+\{                              { return '{'; }
+\}                              { return '}'; }
+\[                              { return '['; }
+\]                              { return ']'; }
+\-                              { return '-'; }
+\:                              { return ':'; }
+\/                              { return '/'; }
+\%                              { return '%'; }
+\^                              { return '^'; }
+\!                              { return '!'; }
+\,                              { return ','; }
+\&                              { return '&'; }
+\?                              { return '?'; }
+\'                              { return '\''; }
+[ ]                             { }
+\t                              { }
+\r                              { }
+\n                              { }
+.                               {
 
-                            }
+                                }
 %%
 
-int yywrap () {
+int yywrap() {
     return 1;
 }

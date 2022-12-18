@@ -37,6 +37,36 @@
 %type <ptr_t> Var
 
 %token VAR
+%token IF
+%token ELSE
+%token WHILE
+%token FOR
+%token DO
+%token SELECT
+%token FROM
+%token WHERE
+%token IN
+%token FUN
+%token RETURN
+%token IDENT
+%token INT_LIT
+%token STR_LIT
+%token LT
+%token LTE
+%token GT
+%token GTE
+%token N_EQUALS
+%token AND
+%token OR
+%token EQUALS
+%token NEW
+%token PTR
+%token TYPE
+%token INTERFACE
+%token PUBLIC
+%token PRIVATE
+%token FINAL
+%token BUFFER
 
 %%
 Prog            : Var                                       { }
