@@ -34,8 +34,8 @@
     int bool_t;
 }
 
+%type <string_t> Ident
 %type <ptr_t> Prog
-%type <bool_t> IsPtr
 
 %token VAR
 %token IF
@@ -71,32 +71,63 @@
 %token BUFFER
 
 %%
-Prog            : TopLevels                                 { printf("Accept\n"); $$ = NULL; }
+Prog            : TopLevels                                 { $$ = NULL; }
                 |                                           { }
-                | error                                     { write_message(stderr, "Syntax error"); }
-TopLevels       : TopLevels TopLevel                        { printf("TopLevels\n"); }
-                | TopLevel                                  { printf("TopLevels\n"); }
-TopLevel        : TypeDecl                                  { printf("TopLevel\n"); }
-                | Declaration                               { printf("TopLevel\n"); }
-                | Function                                  { printf("TopLevel\n"); }
-TypeDecl        : TYPE IDENT ';'                            { printf("TypeDecl\n"); }
-Vars            : Vars ',' Var                              { printf("Vars\n"); }
-                | Var                                       { printf("Vars\n"); }
-Var             : IsPtr IDENT ':' Type                      { printf("Var %s\n", $1 ? "*" : "&"); }
-Declaration     : VAR Vars ';'                              { printf("Declaration\n"); }
-Type            : IDENT                                     { printf("Type\n"); }
-IsPtr           : '*'                                       { $$ = true; }
-                |                                           { $$ = false; }
-Function        : FUN IDENT '(' ')' ';'                     { printf("Function\n"); }
-                | FUN error                                 { write_message(stderr, "Expected identifier"); }
-                  '(' ')' ';'
-                | FUN IDENT error                           { write_message(stderr, "Expected '('"); }
-                  ')' ';'
-                | FUN IDENT  '(' error                      { write_message(stderr, "Expected ')'"); }
-                  ';'
-                | FUN IDENT  '(' ')' error                  { write_message(stderr, "Expected ';'"); }
+TopLevels       : TopLevels TopLevel                        { }
+                | TopLevel                                  { }
+
+                /* Valid top-level declaration types */
+TopLevel        : TypeDecl                                  { }
+                | Declaration                               { }
+                | Function                                  { }
+                | error                                     { }
+
+                /* Type interface and structure definitions */
+TypeDecl        : TYPE Ident SemiC                          { free($2); }
+                | INTERFACE Ident SemiC                     { free($2); }
+
+                /* Global and inline variable declarations */
+Vars            : Vars ',' Var                              { }
+                | Var                                       { }
+Var             : Ident Colon Type                          { free($1); }
+                | '*' Ident Colon Type                      { free($2); }
+Declaration     : VAR Vars SemiC                            { }
+Type            : Ident                                     { free($1); }
+
+                /* Function signature and body definitions */
+Function        : FUN Ident OpenP CloseP FuncType Statement { free($2); }
+FuncType        : ':' Type                                  { }
+                |                                           { }
+Statement       : Body                                      { }
+                | error                                     { write_message(stderr, "Expected function body"); }
+Body            : '{' CloseB                                { }
+
+                /* Error handling for common expected tokens */
+Ident           : IDENT                                     { $$ = strdup(yytext); }
+                | error                                     { write_message(stderr, "Expected identifier"); }
+OpenP           : '('                                       { }
+                | error                                     { write_message(stderr, "Expected '('"); }
+CloseP          : ')'                                       { }
+                | error                                     { write_message(stderr, "Expected ')'"); }
+SemiC           : ';'                                       { }
+                | error                                     { write_message(stderr, "Expected ';'"); }
+Colon           : ':'                                       { }
+                | error                                     { write_message(stderr, "Expected ':'"); }
+CloseB          : '}'                                       { }
+                | error                                     { write_message(stderr, "Expected '}'"); }
 %%
 
-int yyerror(char *error) {
+char *msg = NULL;
+
+int yyerror(char *_) {
+    char prefix[] = "Unexpected token '";
+    size_t yylen = strlen(yytext);
+    size_t new_len = sizeof(prefix) + yylen + 1;
+    char *constructed = (char *)malloc(new_len);
+
+    snprintf(constructed, new_len, "%s%s'", prefix, yytext);
+    write_message(stderr, constructed);
+
+    free(constructed);
     return 1;
 }

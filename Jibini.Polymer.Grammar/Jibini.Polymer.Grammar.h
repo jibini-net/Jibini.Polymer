@@ -19,3 +19,5 @@
 // IN THE SOFTWARE.
 
 #pragma once
+
+void shutdown();

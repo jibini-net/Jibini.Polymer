@@ -30,20 +30,19 @@
 
 #include "io/source.h"
 
-void shutdown();
-
 int main(int arg_c, char **arg_v)
 {
-    // Expects to operate only on standard in/out/error
+    // Expects to operate only on standard in/out/error files
     if (arg_c != 1)
     {
         fprintf(stderr, "Usage: %s\n", arg_v[0]);
         return 1;
     }
 
+    // Parse tokens until unrecoverable error or EOF
     begin_file(stdin);
     int result = yyparse();
-    
+    // Cleanup state and release copies of input in memory
     shutdown();
     return result;
 }

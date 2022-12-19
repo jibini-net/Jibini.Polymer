@@ -27,6 +27,7 @@
 #include <stdbool.h>
 #include <fcntl.h>
 
+#include "Jibini.Polymer.Grammar.h"
 #include "error.h"
 
 /**
@@ -54,8 +55,6 @@ void begin_file(FILE *file)
     assert(!static_file);
     static_file = file;
 }
-
-extern void shutdown();
 
 // Tries to read the next line of source, with a maximum length
 bool _read_line()
@@ -101,7 +100,9 @@ char read_next()
         _read_line();
     }
     // Return next character or EOF, avoid leaving bounds
-    return *next_col ? *(next_col++) : EOF;
+    return (next_col && *next_col)
+        ? *(next_col++)
+        : EOF;
 }
 
 void free_file()
@@ -122,9 +123,6 @@ void free_file()
 
     static_file = NULL;
 }
-
-#define MIN(a, b) ((a) < (b) ? (a) : (b))
-#define MAX(a, b) ((a) > (b) ? (a) : (b))
 
 void write_message(FILE *file, char *message)
 {
