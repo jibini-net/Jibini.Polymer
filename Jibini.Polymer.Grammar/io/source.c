@@ -100,9 +100,7 @@ char read_next()
         _read_line();
     }
     // Return next character or EOF, avoid leaving bounds
-    return (next_col && *next_col)
-        ? *(next_col++)
-        : EOF;
+    return (next_col && *next_col) ? *(next_col++) : EOF;
 }
 
 void free_file()

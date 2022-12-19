@@ -80,6 +80,7 @@ TopLevels       : TopLevels TopLevel                        { }
 TopLevel        : TypeDecl                                  { }
                 | Declaration                               { }
                 | Function                                  { }
+                /* Error boundary to prevent process from exiting */
                 | error                                     { }
 
                 /* Type interface and structure definitions */
@@ -95,12 +96,12 @@ Declaration     : VAR Vars SemiC                            { }
 Type            : Ident                                     { free($1); }
 
                 /* Function signature and body definitions */
-Function        : FUN Ident OpenP CloseP FuncType Statement { free($2); }
+Function        : FUN Ident OpenP CloseP FuncType FuncBody  { free($2); }
 FuncType        : ':' Type                                  { }
                 |                                           { }
-Statement       : Body                                      { }
+FuncBody        : Block                                     { }
                 | error                                     { write_message(stderr, "Expected function body"); }
-Body            : '{' CloseB                                { }
+Block           : '{' CloseB                                { }
 
                 /* Error handling for common expected tokens */
 Ident           : IDENT                                     { $$ = strdup(yytext); }
