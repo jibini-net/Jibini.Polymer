@@ -50,6 +50,7 @@ buffer                          { return BUFFER; }
 _*{letter}({letter}|{digit}|_)* { return IDENT; }
 {digit}{digit}*                 { return INT_LIT; }
 \"(\\.|[^"\\])*\"               { return STR_LIT; }
+\'(\\.|[^'\\])*\'               { return CHAR_LIT; }
 \<                              { return LT; }
 \<\=                            { return LTE; }
 \>                              { return GT; }

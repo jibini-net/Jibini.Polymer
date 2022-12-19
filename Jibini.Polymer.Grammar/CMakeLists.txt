@@ -37,7 +37,8 @@ FLEX_TARGET(Lexer "lexer/polymer.l" "${CMAKE_CURRENT_BINARY_DIR}/lexer/lexer.c"
 file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/parser/")
 find_package(BISON 3.8.2)
 BISON_TARGET(Parser "parser/polymer.y" "${CMAKE_CURRENT_BINARY_DIR}/parser/parser.c"
-    DEFINES_FILE "${CMAKE_CURRENT_BINARY_DIR}/parser/parser.h")
+    DEFINES_FILE "${CMAKE_CURRENT_BINARY_DIR}/parser/parser.h"
+    COMPILE_FLAGS -Wcounterexamples)
 
 ADD_FLEX_BISON_DEPENDENCY(Lexer Parser)
 include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})

@@ -34,7 +34,8 @@
     int bool_t;
 }
 
-%type <ptr_t> Var
+%type <ptr_t> Prog
+%type <bool_t> IsPtr
 
 %token VAR
 %token IF
@@ -51,6 +52,7 @@
 %token IDENT
 %token INT_LIT
 %token STR_LIT
+%token CHAR_LIT
 %token LT
 %token LTE
 %token GT
@@ -69,13 +71,32 @@
 %token BUFFER
 
 %%
-Prog            : Var                                       { fprintf(stdout, "Accept\n"); }
-                |                                           { fprintf(stdout, "Blank\n"); }
-Var             : Var VAR                                   { printf("Node\n");$$ = NULL; }
-                | VAR                                       { printf("Leaf\n");$$ = NULL; }
+Prog            : TopLevels                                 { printf("Accept\n"); $$ = NULL; }
+                |                                           { }
+                | error                                     { write_message(stderr, "Syntax error"); }
+TopLevels       : TopLevels TopLevel                        { printf("TopLevels\n"); }
+                | TopLevel                                  { printf("TopLevels\n"); }
+TopLevel        : TypeDecl                                  { printf("TopLevel\n"); }
+                | Declaration                               { printf("TopLevel\n"); }
+                | Function                                  { printf("TopLevel\n"); }
+TypeDecl        : TYPE IDENT ';'                            { printf("TypeDecl\n"); }
+Vars            : Vars ',' Var                              { printf("Vars\n"); }
+                | Var                                       { printf("Vars\n"); }
+Var             : IsPtr IDENT ':' Type                      { printf("Var %s\n", $1 ? "*" : "&"); }
+Declaration     : VAR Vars ';'                              { printf("Declaration\n"); }
+Type            : IDENT                                     { printf("Type\n"); }
+IsPtr           : '*'                                       { $$ = true; }
+                |                                           { $$ = false; }
+Function        : FUN IDENT '(' ')' ';'                     { printf("Function\n"); }
+                | FUN error                                 { write_message(stderr, "Expected identifier"); }
+                  '(' ')' ';'
+                | FUN IDENT error                           { write_message(stderr, "Expected '('"); }
+                  ')' ';'
+                | FUN IDENT  '(' error                      { write_message(stderr, "Expected ')'"); }
+                  ';'
+                | FUN IDENT  '(' ')' error                  { write_message(stderr, "Expected ';'"); }
 %%
 
 int yyerror(char *error) {
-    write_message(stderr, error);
     return 1;
 }
