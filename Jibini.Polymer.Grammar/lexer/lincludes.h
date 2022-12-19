@@ -31,3 +31,5 @@
     char c = read_next();\
     result = (c == EOF) ? YY_NULL : (buf[0] = c, 1);\
 }
+
+extern void shutdown();

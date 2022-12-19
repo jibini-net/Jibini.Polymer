@@ -84,7 +84,9 @@ _*{letter}({letter}|{digit}|_)* { return IDENT; }
 \r                              { }
 \n                              { }
 .                               {
-
+                                    write_message(stderr, "Unexpected character(s) in input");
+                                    shutdown();
+                                    exit(EXIT_FAILURE);
                                 }
 %%
 

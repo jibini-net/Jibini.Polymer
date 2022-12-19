@@ -127,8 +127,10 @@ void write_message(FILE *file, char *message)
 
 void write_message_at(FILE *file, char *message, size_t line, size_t col)
 {
+    fprintf(file, "Line %lu, column %lu:\n", line + 1, col + 1);
+
     source_buff_t *find = source_head;
-    for (int i = 0; i < line; (find = find->next, i++));
+    for (int i = 0; find && i < line; (find = find->next, i++));
     if (find)
     {
         fprintf(file, "%s", find->line);

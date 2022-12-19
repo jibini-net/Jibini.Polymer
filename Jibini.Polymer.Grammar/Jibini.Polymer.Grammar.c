@@ -30,6 +30,8 @@
 
 #include "io/source.h"
 
+void shutdown();
+
 int main(int arg_c, char **arg_v)
 {
     // Expects to operate only on standard in/out/error
@@ -41,8 +43,13 @@ int main(int arg_c, char **arg_v)
 
     begin_file(stdin);
     int result = yyparse();
+    
+    shutdown();
+    return result;
+}
 
+void shutdown()
+{
     free_file();
     yylex_destroy();
-    return result;
 }
