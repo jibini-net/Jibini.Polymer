@@ -47,7 +47,7 @@ source_buff_t *source_head = NULL;
 source_buff_t **next_line = &source_head;
 size_t lines = 0;
 // Reference to the next character to provide to the scanner
-char *next_col = NULL;
+char *line = NULL, *next_col = NULL;
 
 void begin_file(FILE *file)
 {
@@ -83,7 +83,8 @@ bool _read_line()
     (*next_line)->next = NULL;
     lines++;
 
-    next_col = &(*next_line)->line[0];
+    line = (*next_line)->line;
+    next_col = &line[0];
     next_line = &(*next_line)->next;
     return true;
 }
@@ -116,12 +117,24 @@ void free_file()
     next_col = NULL;
 }
 
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+
 void write_message(FILE *file, char *message)
 {
-    fprintf(file, "%s\n", message);
+    write_message_at(file, message, lines - 1, next_col - line - 1);
 }
 
 void write_message_at(FILE *file, char *message, size_t line, size_t col)
 {
+    source_buff_t *find = source_head;
+    for (int i = 0; i < line; (find = find->next, i++));
+    if (find)
+    {
+        fprintf(file, "%s", find->line);
+        for (int i = 0; i < col; i++) fprintf(file, " ");
+        fprintf(file, "^\n");
+    }
+
     fprintf(file, "%s\n", message);
 }
