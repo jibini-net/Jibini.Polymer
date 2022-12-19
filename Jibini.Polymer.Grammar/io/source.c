@@ -55,6 +55,8 @@ void begin_file(FILE *file)
     static_file = file;
 }
 
+extern void shutdown();
+
 // Tries to read the next line of source, with a maximum length
 bool _read_line()
 {
@@ -66,6 +68,7 @@ bool _read_line()
     // Checks error and EOF state
     if (!text && !feof(static_file))
     {
+        shutdown();
         DIE("Error reading from character stream");
     } else if (!text)
     {
@@ -75,7 +78,8 @@ bool _read_line()
     if (buffer[MAX_LINE_LEN] && buffer[MAX_LINE_LEN] != '\n')
     {
         write_message(stderr, "Exceeded the maximum line length");
-        DIE("Syntax error");
+        shutdown();
+        exit(EXIT_FAILURE);
     }
 
     *next_line = (source_buff_t *)malloc(sizeof(source_buff_t));
@@ -110,11 +114,13 @@ void free_file()
         next = line->next;
         free(line);
     }
+
     // Reset state
-    static_file = NULL;
     source_head = NULL;
     next_line = NULL;
     next_col = NULL;
+
+    static_file = NULL;
 }
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
@@ -129,11 +135,13 @@ void write_message_at(FILE *file, char *message, size_t line, size_t col)
 {
     fprintf(file, "Line %lu, column %lu:\n", line + 1, col + 1);
 
+    // Print out the line if it's loaded in memory
     source_buff_t *find = source_head;
     for (int i = 0; find && i < line; (find = find->next, i++));
     if (find)
     {
         fprintf(file, "%s", find->line);
+
         for (int i = 0; i < col; i++) fprintf(file, " ");
         fprintf(file, "^\n");
     }
