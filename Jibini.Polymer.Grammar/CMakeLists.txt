@@ -45,6 +45,9 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
 # Add source to this project's executable.
 add_executable(Jibini.Polymer.Grammar "Jibini.Polymer.Grammar.c"
     "Jibini.Polymer.Grammar.h"
+    "io/error.h"
+    "io/source.c"
+    "io/source.h"
     ${FLEX_Lexer_OUTPUTS}
     ${BISON_Parser_OUTPUTS})
 
