@@ -25,8 +25,9 @@
 #include <string.h>
 
 #include "parser/parser.h"
+#include "io/source.h"
 
 #define YY_INPUT(buf, result, max_size) {\
-    /*char c = next_char();\
-    result = (c == EOF) ? YY_NULL : (buf[0] = c, 1);*/\
+    char c = read_next();\
+    result = (c == EOF) ? YY_NULL : (buf[0] = c, 1);\
 }

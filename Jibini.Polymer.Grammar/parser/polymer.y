@@ -69,10 +69,13 @@
 %token BUFFER
 
 %%
-Prog            : Var                                       { }
-Var             : VAR                                       { $$ = NULL; }
+Prog            : Var                                       { fprintf(stdout, "Accept\n"); }
+                |                                           { fprintf(stdout, "Blank\n"); }
+Var             : Var VAR                                   { printf("Node\n");$$ = NULL; }
+                | VAR                                       { printf("Leaf\n");$$ = NULL; }
 %%
 
-int yyerror(char *s) {
+int yyerror(char *error) {
+    write_message(stderr, error);
     return 1;
 }

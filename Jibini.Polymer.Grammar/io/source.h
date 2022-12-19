@@ -30,9 +30,9 @@
  * 
  * Not thread safe.
  * 
- * @param fd File descriptor of the input stream of characters.
+ * @param file Source for input stream of characters.
  */
-void begin_file(int fd);
+void begin_file(FILE *file);
 
 /**
  * Returns the next character from the input stream, reading more if the current

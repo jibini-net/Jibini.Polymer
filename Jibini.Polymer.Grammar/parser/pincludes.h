@@ -25,6 +25,9 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+#include "io/source.h"
+#include "io/error.h"
+
 extern int yylex();
 extern char *yytext;
 extern int yyerror(char *s);

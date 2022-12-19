@@ -20,10 +20,29 @@
 
 #include "Jibini.Polymer.Grammar.h"
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <fcntl.h>
+#include <stdbool.h>
+
 #include "lexer/lexer.h"
 #include "parser/parser.h"
 
+#include "io/source.h"
+
 int main(int arg_c, char **arg_v)
 {
-    
+    // Expects to operate only on standard in/out/error
+    if (arg_c != 1)
+    {
+        fprintf(stderr, "Usage: %s\n", arg_v[0]);
+        return 1;
+    }
+
+    begin_file(stdin);
+    int result = yyparse();
+
+    free_file();
+    yylex_destroy();
+    return result;
 }

@@ -49,10 +49,10 @@ size_t lines = 0;
 // Reference to the next character to provide to the scanner
 char *next_col = NULL;
 
-void begin_file(int fd)
+void begin_file(FILE *file)
 {
     assert(!static_file);
-    static_file = fdopen(fd, "r");
+    static_file = file;
 }
 
 // Tries to read the next line of source, with a maximum length
@@ -91,12 +91,12 @@ bool _read_line()
 char read_next()
 {
     // Attempt to read more at end of line
-    if (!(*next_col))
+    if (!next_col || !(*next_col))
     {
         _read_line();
     }
     // Return next character or EOF, avoid leaving bounds
-    return *next_col ? *(next_col++) : '\0';
+    return *next_col ? *(next_col++) : EOF;
 }
 
 void free_file()
