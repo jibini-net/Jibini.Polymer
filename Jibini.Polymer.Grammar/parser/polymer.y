@@ -138,11 +138,11 @@ int yyerror(char *_) {
     char prefix[] = "Unexpected token '";
     size_t yylen = strlen(yytext);
     size_t new_len = sizeof(prefix) + yylen + 1;
-    char *constructed = (char *)malloc(new_len);
+    char *msg = (char *)malloc(new_len);
 
-    snprintf(constructed, new_len, "%s%s'", prefix, yytext);
-    write_message(stderr, constructed);
+    snprintf(msg, new_len, "%s%s'", prefix, yytext);
+    write_message(stderr, msg);
 
-    free(constructed);
+    free(msg);
     return 1;
 }

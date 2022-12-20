@@ -24,14 +24,6 @@
 #include <stdio.h>
 
 /**
- * Substitutes the result of the operation with a default value if the operation
- * was not completed successfully.
- * 
- * @param message Error message to print if the syscall was not successful.
- */
-#define REPLACE(default) ({ result = default; })
-
-/**
  * Prints the current error message according to the error state, then exits.
  * 
  * @param message Error message to print if the syscall was not successful.
@@ -44,6 +36,14 @@
  * @param message Error message to print if the call was not successful.
  */
 #define DIE(message) (fprintf(stderr, "%s\n", message), exit(EXIT_FAILURE))
+
+/**
+ * Substitutes the result of the operation with a default value if the operation
+ * was not completed successfully.
+ * 
+ * @param message Error message to print if the syscall was not successful.
+ */
+#define REPLACE(default) ({ result = default; })
 
 /**
  * Attempts the syscall, evaluating an action if the result indicates error.
