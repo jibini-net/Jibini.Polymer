@@ -34,6 +34,7 @@
     int bool_t;
 }
 
+%type <string_t> _Ident
 %type <string_t> Ident
 %type <ptr_t> Prog
 
@@ -93,10 +94,20 @@ Vars            : Vars ',' Var                              { }
 Var             : Ident Colon Type                          { free($1); }
                 | '*' Ident Colon Type                      { free($2); }
 Declaration     : VAR Vars SemiC                            { }
-Type            : Ident                                     { free($1); }
+Type            : Ident TypeParam                           { free($1); }
+                | Ident                                     { free($1); }
+Types           : Types ',' Type                            { }
+                | Type                                      { }
+TypeParam       : LT Types Gt                               { }
 
                 /* Function signature and body definitions */
-Function        : FUN Ident OpenP CloseP FuncType FuncBody  { free($2); }
+Function        : FUN Ident TypeParam
+                  OpenP FuncVars CloseP FuncType
+                  FuncBody                                  { free($2); }
+FuncVars        : FuncVars ',' FuncVar                      { }
+                | FuncVar                                   { }
+                |                                           { }
+FuncVar         : _Ident Colon Type                         { free($1); }
 FuncType        : ':' Type                                  { }
                 |                                           { }
 FuncBody        : Block                                     { }
@@ -104,7 +115,8 @@ FuncBody        : Block                                     { }
 Block           : '{' CloseB                                { }
 
                 /* Error handling for common expected tokens */
-Ident           : IDENT                                     { $$ = strdup(yytext); }
+_Ident          : IDENT                                     { $$ = strdup(yytext); }
+Ident           : _Ident                                    { $$ = $1; }
                 | error                                     { write_message(stderr, "Expected identifier"); }
 OpenP           : '('                                       { }
                 | error                                     { write_message(stderr, "Expected '('"); }
@@ -116,6 +128,8 @@ Colon           : ':'                                       { }
                 | error                                     { write_message(stderr, "Expected ':'"); }
 CloseB          : '}'                                       { }
                 | error                                     { write_message(stderr, "Expected '}'"); }
+Gt              : GT                                        { }
+                | error                                     { write_message(stderr, "Expected '>'"); }
 %%
 
 char *msg = NULL;
