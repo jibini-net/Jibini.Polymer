@@ -30,35 +30,29 @@
 #include "Jibini.Polymer.Grammar.h"
 #include "error.h"
 
-/**
- * Linked series of lines of source with lines of arbitrary length.
- */
-typedef struct source_buff_t
-{
-    char *line;
-    struct source_buff_t *next;
-} source_buff_t;
-
 // Input source file being read, which should only be set once
 FILE *static_file = NULL;
 
 // Line zero of the stored source, or `NULL` if no source is loaded
 source_buff_t *source_head = NULL;
-// Location in chain to place the next element
-source_buff_t **next_line = &source_head;
+// Current location in chain and place to add a new element
+source_buff_t *line = NULL, **next_line = &source_head;
 size_t lines = 0;
 // Reference to the next character to provide to the scanner
-char *line = NULL, *next_col = NULL;
+char *next_col = NULL;
 
 void begin_file(FILE *file)
 {
     assert(!static_file);
+    
     static_file = file;
 }
 
 // Tries to read the next line of source, with a maximum length
 bool _read_line()
 {
+    assert(static_file);
+    
     char buffer[MAX_LINE_LEN + 2];
     // Needs to be nulled for length check
     buffer[MAX_LINE_LEN] = '\0';
@@ -76,24 +70,28 @@ bool _read_line()
 
     if (buffer[MAX_LINE_LEN] && buffer[MAX_LINE_LEN] != '\n')
     {
-        write_message(stderr, "Exceeded the maximum line length");
+        write_mesg(stderr, "Exceeded the maximum line length");
         shutdown();
         exit(EXIT_FAILURE);
     }
 
     *next_line = (source_buff_t *)malloc(sizeof(source_buff_t));
     (*next_line)->line = strdup(buffer);
+    (*next_line)->index = lines;
     (*next_line)->next = NULL;
-    lines++;
 
-    line = (*next_line)->line;
-    next_col = &line[0];
+    line = *next_line;
+    lines++;
+    
+    next_col = line->line;
     next_line = &(*next_line)->next;
     return true;
 }
 
 char read_next()
 {
+    assert(static_file);
+    
     // Attempt to read more at end of line
     if (!next_col || !(*next_col))
     {
@@ -105,6 +103,8 @@ char read_next()
 
 void free_file()
 {
+    assert(static_file);
+    
     // Free entire chain of stored source code
     for (source_buff_t *line = source_head, *next; line; line = next)
     {
@@ -122,25 +122,34 @@ void free_file()
     static_file = NULL;
 }
 
-void write_message(FILE *file, char *message)
+void write_mesg_for(FILE *file, char *mesg, source_buff_t *line, size_t col)
 {
-    write_message_at(file, message, lines - 1, next_col - line - 1);
-}
-
-void write_message_at(FILE *file, char *message, size_t line, size_t col)
-{
-    fprintf(file, "Line %lu, column %lu:\n", line + 1, col + 1);
-
-    // Print out the line if it's loaded in memory
-    source_buff_t *find = source_head;
-    for (int i = 0; find && i < line; (find = find->next, i++));
-    if (find)
+    fprintf(file, "Line %lu, column %lu:\n", line->index + 1, col + 1);
+    if (line)
     {
-        fprintf(file, "%s", find->line);
+        fprintf(file, "%s", line->line);
 
         for (int i = 0; i < col; i++) fprintf(file, " ");
         fprintf(file, "^\n");
     }
 
-    fprintf(file, "%s\n", message);
+    fprintf(file, "%s\n", mesg);
+}
+
+void write_mesg(FILE *file, char *mesg)
+{
+    assert(static_file);
+    
+    write_mesg_for(file, mesg, line, next_col - line->line - 1);
+}
+
+void write_mesg_at(FILE *file, char *mesg, size_t line, size_t col)
+{
+    assert(static_file);
+
+    // Print out the line if it's loaded in memory
+    source_buff_t *find = source_head;
+    for (int i = 0; find && i < line; (find = find->next, i++));
+
+    write_mesg_for(file, mesg, find, col);
 }

@@ -26,11 +26,69 @@
 #define MAX_LINE_LEN 2048
 
 /**
+ * Linked series of lines of source with lines of arbitrary length.
+ */
+typedef struct source_buff_t
+{
+    /**
+     * Source content for this line of code.
+     */
+    char *line;
+
+    /**
+     * Remember the line number (zero-indexed).
+    */
+    size_t index;
+
+    /**
+     * Next stored line of source, if any.
+     */
+    struct source_buff_t *next;
+} source_buff_t;
+
+/**
+ * Marks the association between a character range in source and a parsed token
+ * or flow control structure.
+ */
+typedef struct source_tag_t
+{
+    /**
+     * Line in memory where the element occurs.
+    */
+    source_buff_t *line;
+
+    /**
+     * Pointer to first character of source element in the line.
+     */
+    char *start;
+
+    /**
+     * Number of characters consumed by the tagged portion.
+     */
+    size_t length;
+
+    /**
+     * Identifier for the type of source element.
+     */
+    char *name_tag;
+
+    /**
+     * Unique number linking multiple tagged portions to one parent.
+     */
+    unsigned long uid;
+
+    /**
+     * Next stored tagged range of source, if any.
+     */
+    struct source_tag_t *next;
+} source_tag_t;
+
+/**
  * Begins reading the stream of characters, preparing to provide characters.
  * 
  * Not thread safe.
  * 
- * @param file Source for input stream of characters.
+ *  @param file Source for input stream of characters.
  */
 void begin_file(FILE *file);
 
@@ -44,6 +102,17 @@ char read_next();
 
 /**
  * Writes a message surrounded by and pointing to a particular position in the
+ * source code. Uses the provided source line.
+ * 
+ *  @param file File to which source lines and message are written.
+ *  @param mesg Helpful message related to the area in input source.
+ *  @param line Reference to stored source content for the line.
+ *  @param col Column number (zero-index) at which the error occurred.
+ */
+void write_mesg_for(FILE *file, char *mesg, source_buff_t *line, size_t col);
+
+/**
+ * Writes a message surrounded by and pointing to a particular position in the
  * source code. Uses the current position of the scanner.
  * 
  * Not thread safe.
@@ -51,7 +120,7 @@ char read_next();
  *  @param file File to which source lines and message are written.
  *  @param message Helpful message related to the area in input source.
  */
-void write_message(FILE *file, char *message);
+void write_mesg(FILE *file, char *mesg);
 
 /**
  * Writes a message surrounded by and pointing to a particular position in the
@@ -61,10 +130,11 @@ void write_message(FILE *file, char *message);
  * Not thread safe.
  * 
  *  @param file File to which source lines and message are written.
- *  @param message Helpful message related to the area in input source.
+ *  @param mesg Helpful message related to the area in input source.
  *  @param line Line number (zero-indexed) at which the error occurred.
+ *  @param col Column number (zero-index) at which the error occurred.
  */
-void write_message_at(FILE *file, char *message, size_t line, size_t col);
+void write_mesg_at(FILE *file, char *mesg, size_t line, size_t col);
 
 /**
  * Resets the static state and releases the allocated memory for stored lines.
