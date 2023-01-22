@@ -111,25 +111,25 @@ FuncVar         : _Ident Colon Type                         { free($1); }
 FuncType        : ':' Type                                  { }
                 |                                           { }
 FuncBody        : Block                                     { }
-                | error                                     { write_message(stderr, "Expected function body"); }
+                | error                                     { write_mesg(stderr, "Expected function body"); }
 Block           : '{' CloseB                                { }
 
                 /* Error handling for common expected tokens */
 _Ident          : IDENT                                     { $$ = strdup(yytext); }
 Ident           : _Ident                                    { $$ = $1; }
-                | error                                     { write_message(stderr, "Expected identifier"); }
+                | error                                     { write_mesg(stderr, "Expected identifier"); }
 OpenP           : '('                                       { }
-                | error                                     { write_message(stderr, "Expected '('"); }
+                | error                                     { write_mesg(stderr, "Expected '('"); }
 CloseP          : ')'                                       { }
-                | error                                     { write_message(stderr, "Expected ')'"); }
+                | error                                     { write_mesg(stderr, "Expected ')'"); }
 SemiC           : ';'                                       { }
-                | error                                     { write_message(stderr, "Expected ';'"); }
+                | error                                     { write_mesg(stderr, "Expected ';'"); }
 Colon           : ':'                                       { }
-                | error                                     { write_message(stderr, "Expected ':'"); }
+                | error                                     { write_mesg(stderr, "Expected ':'"); }
 CloseB          : '}'                                       { }
-                | error                                     { write_message(stderr, "Expected '}'"); }
+                | error                                     { write_mesg(stderr, "Expected '}'"); }
 Gt              : GT                                        { }
-                | error                                     { write_message(stderr, "Expected '>'"); }
+                | error                                     { write_mesg(stderr, "Expected '>'"); }
 %%
 
 char *msg = NULL;
@@ -141,7 +141,7 @@ int yyerror(char *_) {
     char *msg = (char *)malloc(new_len);
 
     snprintf(msg, new_len, "%s%s'", prefix, yytext);
-    write_message(stderr, msg);
+    write_mesg(stderr, msg);
 
     free(msg);
     return 1;

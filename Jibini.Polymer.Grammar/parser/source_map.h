@@ -1,4 +1,4 @@
-// Copyright (c) 2022 Zach Goethel
+// Copyright (c) 2022-2023 Zach Goethel
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,41 @@
 #pragma once
 
 #include "io/source.h"
-#include "io/error.h"
-#include "parser/source_map.h"
 
-void shutdown();
+/**
+ * Marks the association between a character range in source and a parsed token
+ * or flow control structure.
+ */
+typedef struct source_tag_t
+{
+    /**
+     * Line in memory where the element occurs.
+    */
+    source_buff_t *line;
+
+    /**
+     * Pointer to first character of source element in the line.
+     */
+    char *start;
+
+    /**
+     * Number of characters consumed by the tagged portion.
+     */
+    size_t length;
+
+    /**
+     * Identifier for the type of source element.
+     */
+    char *name_tag;
+
+    /**
+     * Unique number linking multiple tagged portions to one parent.
+     */
+    unsigned long uid;
+
+    /**
+     * Next stored tagged range of source, if any.
+     */
+    struct source_tag_t *next;
+} source_tag_t;
+

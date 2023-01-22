@@ -28,7 +28,7 @@
 #include <fcntl.h>
 
 #include "Jibini.Polymer.Grammar.h"
-#include "error.h"
+#include "io/error.h"
 
 // Input source file being read, which should only be set once
 FILE *static_file = NULL;
@@ -70,9 +70,8 @@ bool _read_line()
 
     if (buffer[MAX_LINE_LEN] && buffer[MAX_LINE_LEN] != '\n')
     {
-        write_mesg(stderr, "Exceeded the maximum line length");
         shutdown();
-        exit(EXIT_FAILURE);
+        DIE("Exceeded the maximum line length");
     }
 
     *next_line = (source_buff_t *)malloc(sizeof(source_buff_t));
@@ -87,6 +86,10 @@ bool _read_line()
     next_line = &(*next_line)->next;
     return true;
 }
+
+source_buff_t *curr_line() { return line; }
+
+size_t curr_col() { return next_col - line->line - 1; }
 
 char read_next()
 {
@@ -140,7 +143,7 @@ void write_mesg(FILE *file, char *mesg)
 {
     assert(static_file);
     
-    write_mesg_for(file, mesg, line, next_col - line->line - 1);
+    write_mesg_for(file, mesg, curr_line(), curr_col());
 }
 
 void write_mesg_at(FILE *file, char *mesg, size_t line, size_t col)

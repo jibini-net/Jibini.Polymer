@@ -47,43 +47,6 @@ typedef struct source_buff_t
 } source_buff_t;
 
 /**
- * Marks the association between a character range in source and a parsed token
- * or flow control structure.
- */
-typedef struct source_tag_t
-{
-    /**
-     * Line in memory where the element occurs.
-    */
-    source_buff_t *line;
-
-    /**
-     * Pointer to first character of source element in the line.
-     */
-    char *start;
-
-    /**
-     * Number of characters consumed by the tagged portion.
-     */
-    size_t length;
-
-    /**
-     * Identifier for the type of source element.
-     */
-    char *name_tag;
-
-    /**
-     * Unique number linking multiple tagged portions to one parent.
-     */
-    unsigned long uid;
-
-    /**
-     * Next stored tagged range of source, if any.
-     */
-    struct source_tag_t *next;
-} source_tag_t;
-
-/**
  * Begins reading the stream of characters, preparing to provide characters.
  * 
  * Not thread safe.
@@ -99,6 +62,16 @@ void begin_file(FILE *file);
  * Not thread safe.
  */
 char read_next();
+
+/**
+ * Provides access to the line currently being parsed.
+ */
+source_buff_t *curr_line();
+
+/**
+ * Provides access to the index of the current character being scanned.
+ */
+size_t curr_col();
 
 /**
  * Writes a message surrounded by and pointing to a particular position in the

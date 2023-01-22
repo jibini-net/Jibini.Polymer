@@ -1,4 +1,4 @@
-// Copyright (c) 2022 Zach Goethel
+// Copyright (c) 2022-2023 Zach Goethel
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -18,10 +18,12 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
-#pragma once
+#include "source_map.h"
 
-#include "io/source.h"
+#include "Jibini.Polymer.Grammar.h"
 #include "io/error.h"
-#include "parser/source_map.h"
 
-void shutdown();
+// To access the current token and offset indices
+extern char* yytext;
+
+
