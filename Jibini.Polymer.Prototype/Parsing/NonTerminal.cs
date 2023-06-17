@@ -1,4 +1,6 @@
-﻿namespace Jibini.Polymer;
+﻿using Jibini.Polymer.Prototype.Lexer;
+
+namespace Jibini.Polymer.Prototype.Parser;
 
 /// <summary>
 /// Sequence of source tokens which is composed of other non-terminals, or

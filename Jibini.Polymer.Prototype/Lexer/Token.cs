@@ -1,4 +1,4 @@
-﻿namespace Jibini.Polymer;
+﻿namespace Jibini.Polymer.Prototype.Lexer;
 
 /// <summary>
 /// Closed set of valid tokens in the input source.

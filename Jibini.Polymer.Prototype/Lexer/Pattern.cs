@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace Jibini.Polymer;
+namespace Jibini.Polymer.Prototype.Lexer;
 
 /// <summary>
 /// Marks that the annotated token enum is associated with a regex pattern.

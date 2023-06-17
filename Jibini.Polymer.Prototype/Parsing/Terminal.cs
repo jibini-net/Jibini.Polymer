@@ -1,4 +1,6 @@
-﻿namespace Jibini.Polymer;
+﻿using Jibini.Polymer.Prototype.Lexer;
+
+namespace Jibini.Polymer.Prototype.Parser;
 
 /// <summary>
 /// Allows a range of characters to be mapped to a leaf node within an abstract

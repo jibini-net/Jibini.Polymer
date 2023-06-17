@@ -1,4 +1,4 @@
-﻿namespace Jibini.Polymer;
+﻿namespace Jibini.Polymer.Prototype.Lexer;
 
 public class TokenStream
 {

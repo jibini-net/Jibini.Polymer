@@ -1,4 +1,7 @@
-﻿namespace Jibini.Polymer;
+﻿using Jibini.Polymer.Prototype.Lexer;
+using Jibini.Polymer.Prototype.Parser;
+
+namespace Jibini.Polymer;
 
 using static Token;
 
