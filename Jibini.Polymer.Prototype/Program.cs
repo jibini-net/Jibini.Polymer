@@ -7,12 +7,25 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        var sourceText = "fun \n/*Hello, world!*/Main(         \n) {}";
-        var source = new TokenStream(sourceText);
-        var success = new Function().TryMatch(source, out var dto);
+        var sourceText = @"
+fun HelloWorld()
+{
+}
 
-        Console.WriteLine($"Input Source: '{sourceText.Replace("\n", "\\n")}'");
-        Console.WriteLine($"Valid Parse: {success}");
-        Console.WriteLine($"Function Name: {dto?.Ident?.Name}");
+fun FooBar()
+{
+}
+            ".Trim();
+        var source = new TokenStream(sourceText);
+
+        for (var i = 0; i < 2; i++)
+        {
+            var success = new Function().TryMatch(source, out var dto);
+
+            Console.WriteLine($"Input Source: '{sourceText.Replace("\n", "\\n").Replace("\r", "")}'");
+            Console.WriteLine($"Valid Parse: {success}");
+            Console.WriteLine($"Function Name: {dto?.Ident?.Name}");
+            Console.WriteLine();
+        }
     }
 }
