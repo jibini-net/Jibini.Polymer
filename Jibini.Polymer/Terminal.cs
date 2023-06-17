@@ -1,6 +1,11 @@
 ﻿namespace Jibini.Polymer;
 
-class Terminal<T> : NonTerminal<T> where T : class
+/// <summary>
+/// Allows a range of characters to be mapped to a leaf node within an abstract
+/// syntax tree. Creates an object containing names, types, and other details.
+/// </summary>
+/// <typeparam name="T">DTO class which will be instantiated with details.</typeparam>
+public class Terminal<T> : NonTerminal<T> where T : class
 {
     private readonly Token terminal;
 
@@ -19,11 +24,9 @@ class Terminal<T> : NonTerminal<T> where T : class
 
         // Output parameter will be populated if there is a constructor on the
         // DTO type accepting a single parameter which is a stream of tokens.
-        //
-        // Constructor controls the stream until the non-terminal is consumed.
         var factory = typeof(T).GetConstructor(new[] { typeof(TokenStream) });
         dto = factory?.Invoke(new[] { source }) as T;
-        // Can fall back to the no-argument constructor where state not needed
+        // Can fall back to zero-argument constructor where state not needed
         if (dto is null)
         {
             factory = typeof(T).GetConstructor(Array.Empty<Type>());

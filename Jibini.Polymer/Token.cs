@@ -1,5 +1,8 @@
 ﻿namespace Jibini.Polymer;
 
+/// <summary>
+/// Closed set of valid tokens in the input source.
+/// </summary>
 public enum Token
 {
     [Pattern(Regex = "\\{")]

@@ -1,8 +1,14 @@
 ﻿namespace Jibini.Polymer;
 
+using static Token;
+
 public class IdentDto
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = "";
+
+    public IdentDto()
+    {
+    }
 
     public IdentDto(TokenStream source)
     {
@@ -16,9 +22,8 @@ public class Body : NonTerminal
     {
         _ = MatchSeries(source,
 
-         // {             }
-            Token.LCurly, Token.RCurly
-            
+            LCurly, RCurly
+
             );
         dto = default;
         return Valid;
@@ -32,19 +37,15 @@ public class FunctionDto
 
 public class Function : NonTerminal<FunctionDto>
 {
-    private readonly Terminal<IdentDto> ident = new(Token.Ident);
-    private readonly Body body = new();
-
     public override bool TryMatch(TokenStream source, out FunctionDto? dto)
     {
         var data = MatchSeries(source,
 
-         // fun        Ident  (              )
-            Token.Fun, ident, Token.LParens, Token.RParens,
-         // [Body]
-            body
+            Fun, To<IdentDto>(Ident), LParens, RParens,
 
-            ).ToList();
+            new Body()
+
+            );
         dto = new()
         {
             Ident = data[1] as IdentDto
@@ -59,12 +60,11 @@ internal class Program
     {
         var tokens = new List<Token>()
         {
-            Token.Fun, Token.Ident, Token.LParens, Token.RParens,
-            Token.LCurly, Token.RCurly,
+            Fun, Ident, LParens, RParens, LCurly, RCurly
         };
-        var body = new Function();
+        var function = new Function();
         var source = new TokenStream(tokens);
-        var success = body.TryMatch(source, out var dto);
+        var success = function.TryMatch(source, out var dto);
         
         Console.WriteLine(success);
         Console.WriteLine(dto);
