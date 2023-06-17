@@ -18,7 +18,7 @@ public class Parameters : NonTerminal<List<ParameterDto>>
         _ = MatchSeries(source, LParens);
 
         dto = new();
-        while (source.Next != RParens)
+        while (Valid && source.Next != RParens)
         {
             var data = MatchSeries(source,
 
@@ -30,6 +30,7 @@ public class Parameters : NonTerminal<List<ParameterDto>>
                 Ident = data[0] as IdentDto,
                 Type = data[2] as TypeDto
             });
+
             if (source.Next != RParens)
             {
                 _ = MatchSeries(source, Comma);

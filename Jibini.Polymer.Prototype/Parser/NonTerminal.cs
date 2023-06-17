@@ -37,7 +37,6 @@ public abstract class NonTerminal
     {
         foreach (var nonTerm in series)
         {
-            // After first failure, attempt no further matches
             if (!Valid)
             {
                 yield return null;
@@ -58,6 +57,21 @@ public abstract class NonTerminal
     protected IList<object?> MatchSeries(TokenStream source, params NonTerminal[] series) =>
         _MatchSeries(source, series).ToList();
 
+    protected object? MatchOptionsIgnoreInvalid(TokenStream source, params NonTerminal[] options)
+    {
+        // TODO Currently doesn't support backtracking, for now ensure unique
+        // first sets.
+        foreach (var nonTerm in options)
+        {
+            if (nonTerm.TryMatch(source, out var dto))
+            {
+                return dto;
+            }
+        }
+        Valid = false;
+        return null;
+    }
+
     /// <summary>
     /// Checks a set of non-terminal actions, expecting at least one will
     /// successfully match.
@@ -72,17 +86,7 @@ public abstract class NonTerminal
         {
             return null;
         }
-        // TODO Currently doesn't support backtracking, for now ensure unique
-        // first sets.
-        foreach (var nonTerm in options)
-        {
-            if (nonTerm.TryMatch(source, out var dto))
-            {
-                return dto;
-            }
-        }
-        Valid = false;
-        return null;
+        return MatchOptions(source, options);
     }
 }
 

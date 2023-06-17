@@ -20,7 +20,7 @@ public class Body : NonTerminal<BodyDto>
 
             LCurly,
 
-                new Statements(),
+                new Statements(endToken: RCurly),
 
             RCurly
 

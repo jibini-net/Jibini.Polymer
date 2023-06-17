@@ -12,10 +12,11 @@ public class TypeParameters : NonTerminal<List<TypeDto?>>
         _ = MatchSeries(source, Lt);
 
         dto = new();
-        while (source.Next != Gt)
+        while (Valid && source.Next != Gt)
         {
             var data = MatchSeries(source, new Type());
             dto.Add(data[0] as TypeDto);
+
             if (source.Next != Gt)
             {
                 _ = MatchSeries(source, Comma);

@@ -12,13 +12,18 @@ fun HelloWorld()
 {
 }
 
+fun Broken(thing: A<Thing<float>>, other_thing: B<string>)
+{
+    fun internalFunc(pars: C) { }
+}
+
 fun FooBar(thing: A<Thing<float>>, other_thing: B<string>)
 {
     fun internalFunc(pars: C) { }
 }
             ".Trim();
         var source = new TokenStream(sourceText);
-        var success = new Statements().TryMatch(source, out var dto);
+        var success = new Statements(endToken: null).TryMatch(source, out var dto);
 
         Console.WriteLine(success);
         Console.WriteLine(dto);

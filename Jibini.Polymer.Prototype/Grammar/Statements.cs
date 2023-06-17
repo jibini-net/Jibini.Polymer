@@ -12,17 +12,30 @@ public abstract class StatementDto
 
 public class Statements : NonTerminal<List<StatementDto>>
 {
+    private readonly Token? endToken;
+
+    public Statements(Token? endToken)
+    {
+        this.endToken = endToken;
+    }
+
     override public bool TryMatch(TokenStream source, out List<StatementDto>? dto)
     {
         dto = new();
-        while ((source.Next ?? RCurly) != RCurly)
+        while (/*Valid && */source.Next != endToken)
         {
-            var data = MatchOptions(source,
+            int startPos = source.Offset;
+            var data = MatchOptionsIgnoreInvalid(source,
                 new Function(),
-                new Body(),
-                Semic)
+                new Body())
                 as StatementDto;
-            if (data is not null)
+
+            // Error recovery boundary, nobody's consuming tokens or bailing out
+            // so discard this token
+            if (source.Offset - startPos == 0)
+            {
+                source.Poll();
+            } else if (data is not null)
             {
                 dto.Add(data);
             }
