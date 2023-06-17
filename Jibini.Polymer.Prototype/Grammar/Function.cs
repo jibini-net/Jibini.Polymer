@@ -5,8 +5,10 @@ namespace Jibini.Polymer.Prototype.Grammar;
 
 using static Token;
 
-public class FunctionDto
+public class FunctionDto : StatementDto
 {
+    override public string Type => "Function";
+
     public IdentDto? Ident { get; set; }
     public List<ParameterDto>? Parameters { get; set; }
     public BodyDto? Body { get; set; }

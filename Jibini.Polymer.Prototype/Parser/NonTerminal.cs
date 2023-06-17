@@ -57,6 +57,28 @@ public abstract class NonTerminal
     /// <returns>Ordered set of DTOs corresponding to each member.</returns>
     protected IList<object?> MatchSeries(TokenStream source, params NonTerminal[] series) =>
         _MatchSeries(source, series).ToList();
+
+    /// <summary>
+    /// Checks a set of non-terminal actions, expecting at least one will
+    /// successfully match.
+    /// </summary>
+    /// <param name="source">Stream from which tokens are consumed.</param>
+    /// <param name="options">Possible next non-terminals to try matching.</param>
+    /// <returns>Resulting DTO from any successfully matched member.</returns>
+    protected object? MatchOptions(TokenStream source, params NonTerminal[] options)
+    {
+        // TODO Currently doesn't support backtracking, for now ensure unique
+        // first sets.
+        foreach (var nonTerm in options)
+        {
+            if (nonTerm.TryMatch(source, out var dto))
+            {
+                return dto;
+            }
+        }
+        Valid = false;
+        return null;
+    }
 }
 
 /// <summary>

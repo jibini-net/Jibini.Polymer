@@ -14,28 +14,13 @@ fun HelloWorld()
 
 fun FooBar(thing: A, other_thing: B)
 {
+    fun internalFunc(pars: C) { }
 }
             ".Trim();
         var source = new TokenStream(sourceText);
+        var success = new Statements().TryMatch(source, out var dto);
 
-        for (var i = 0; i < 2; i++)
-        {
-            Console.WriteLine($"Input Source: '{sourceText.Substring(source.Offset)
-                .Replace("\n", "\\n")
-                .Replace("\r", "")}'");
-
-            var success = new Function().TryMatch(source, out var dto);
-
-            Console.WriteLine($"Valid Parse: {success}");
-            Console.WriteLine($"Function Name: {dto?.Ident?.Name}");
-            if ((dto?.Parameters?.Count ?? 0) == 0)
-            {
-                Console.WriteLine(" (No parameters)");
-            }
-            foreach (var param in dto?.Parameters ?? new())
-            {
-                Console.WriteLine($" - Param {param?.Ident?.Name} is of type {param?.Type?.Name}");
-            }
-        }
+        Console.WriteLine(success);
+        Console.WriteLine(dto);
     }
 }

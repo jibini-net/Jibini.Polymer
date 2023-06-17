@@ -5,21 +5,29 @@ namespace Jibini.Polymer.Prototype.Grammar;
 
 using static Token;
 
-public class BodyDto
+public class BodyDto : StatementDto
 {
+    override public string Type => "Body";
+
+    public List<StatementDto>? Statements { get; set; }
 }
 
 public class Body : NonTerminal<BodyDto>
 {
     public override bool TryMatch(TokenStream source, out BodyDto? dto)
     {
-        _ = MatchSeries(source,
+        var data = MatchSeries(source,
 
-            LCurly, RCurly
+            LCurly,
+
+                new Statements(),
+
+            RCurly
 
             );
         dto = new()
         {
+            Statements = data[1] as List<StatementDto>
         };
         return Valid;
     }
