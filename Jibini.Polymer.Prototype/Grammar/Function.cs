@@ -8,6 +8,7 @@ using static Token;
 public class FunctionDto
 {
     public IdentDto? Ident { get; set; }
+    public List<ParameterDto>? Parameters { get; set; }
     public BodyDto? Body { get; set; }
 }
 
@@ -17,7 +18,7 @@ public class Function : NonTerminal<FunctionDto>
     {
         var data = MatchSeries(source,
 
-            Fun, new Ident(), LParens, /*...,*/ RParens,
+            Fun, new Ident(), LParens, new Parameters(), RParens,
 
             new Body()
 
@@ -25,7 +26,8 @@ public class Function : NonTerminal<FunctionDto>
         dto = new()
         {
             Ident = data[1] as IdentDto,
-            Body = data[4] as BodyDto
+            Parameters = data[3] as List<ParameterDto>,
+            Body = data[5] as BodyDto
         };
         return Valid;
     }

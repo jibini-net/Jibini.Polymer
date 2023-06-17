@@ -13,6 +13,12 @@ public enum Token
     LParens,
     [Pattern(Regex = "\\)")]
     RParens,
+    [Pattern(Regex = "\\,")]
+    Comma,
+    [Pattern(Regex = "\\:")]
+    Colon,
+    [Pattern(Regex = "\\;")]
+    Semic,
     [Pattern(Regex = "fun")]
     Fun,
     [Pattern(Regex = "[A-Za-z_][A-Za-z0-9_]*")]

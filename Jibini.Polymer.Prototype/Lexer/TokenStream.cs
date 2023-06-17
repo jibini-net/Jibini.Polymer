@@ -6,9 +6,12 @@
 /// </summary>
 public class TokenStream
 {
-    // In-memory source and current position in characters
+    // In-memory copy of source which will be parsed
     private readonly string source;
-    private int offset = 0;
+    /// <summary>
+    /// Character position within the input source.
+    /// </summary>
+    public int Offset { get; private set; } = 0;
 
     // Stores the last peeked token to only peek once
     private Token? token;
@@ -37,7 +40,7 @@ public class TokenStream
         foreach (var tok in Enum.GetValues<Token>())
         {
             var matched = tok.GetPatterns()
-                .Select((it) => it.Match(source, offset))
+                .Select((it) => it.Match(source, Offset))
                 .FirstOrDefault((it) => it.Success);
             if (matched is not null)
             {
@@ -63,7 +66,7 @@ public class TokenStream
                 return token!.Value;
             }
             // Reached EOF condition
-            if (offset >= source.Length)
+            if (Offset >= source.Length)
             {
                 return null;
             }
@@ -87,7 +90,7 @@ public class TokenStream
     public Token Poll()
     {
         var result = Next;
-        offset += Text.Length;
+        Offset += Text.Length;
         token = null;
         return result ?? throw new Exception("Polled end of file");
     }
