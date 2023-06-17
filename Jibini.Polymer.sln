@@ -5,6 +5,8 @@ VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jibini.Polymer.Prototype", "Jibini.Polymer.Prototype\Jibini.Polymer.Prototype.csproj", "{11D1F244-C127-4CDA-A049-0A9A61517D06}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jibini.Polymer.Ide", "Jibini.Polymer.Integration\Jibini.Polymer.Ide\Jibini.Polymer.Ide.csproj", "{40A786C6-1775-4DC3-B3A4-D3E8E0A9204E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{11D1F244-C127-4CDA-A049-0A9A61517D06}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11D1F244-C127-4CDA-A049-0A9A61517D06}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11D1F244-C127-4CDA-A049-0A9A61517D06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40A786C6-1775-4DC3-B3A4-D3E8E0A9204E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40A786C6-1775-4DC3-B3A4-D3E8E0A9204E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40A786C6-1775-4DC3-B3A4-D3E8E0A9204E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40A786C6-1775-4DC3-B3A4-D3E8E0A9204E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

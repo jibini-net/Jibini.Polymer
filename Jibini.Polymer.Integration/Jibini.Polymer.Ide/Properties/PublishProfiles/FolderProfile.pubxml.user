@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>C:\Users\zgoethel\Desktop\Source\Jibini.Polymer\Jibini.Polymer.Integration\Jibini.Polymer.Ide\bin\Release\net7.0\publish\</_PublishTargetUrl>
+    <History>True|2023-05-26T02:43:24.9002934Z;True|2023-05-25T21:43:14.1112926-05:00;True|2023-05-25T21:33:05.6737351-05:00;True|2023-05-25T20:40:45.8225226-05:00;True|2023-05-24T23:47:29.2769373-05:00;True|2023-05-24T23:32:35.5974114-05:00;True|2023-05-24T21:00:18.5722682-05:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+</Project>

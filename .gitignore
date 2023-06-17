@@ -3,8 +3,10 @@
 # ==========================
 
 # Visual Studio project files and compilation output
-/out/**
-/.vs/**
+**/out/**
+**/.vs/**
+**/bin/**
+**/obj/**
 
 /CMakeSettings.json
 

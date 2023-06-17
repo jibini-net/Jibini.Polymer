@@ -1,0 +1,91 @@
+﻿::deep {
+    --code-editor-bg: rgba(0, 0, 0, 0.9);
+    --code-editor-focus-bg: rgba(0, 0, 0, 0.85);
+    --code-editor-fg: white;
+    --code-editor-popup-bg: #383838;
+    --code-editor-blink-speed: 1s;
+    --code-editor-radius: 0.3rem;
+}
+
+.code-editor {
+    cursor: text;
+    background: var(--code-editor-bg);
+    color: var(--code-editor-fg);
+    cursor: text;
+    caret-color: transparent;
+
+    display: block;
+    position: absolute;
+    width: fit-content;
+    min-width: 100%;
+    height: fit-content;
+    min-height: 100%;
+    padding: 0.4rem;
+}
+
+    .code-editor:focus {
+        background: var(--code-editor-focus-bg);
+    }
+
+    @keyframes cursor-blink {
+        50% {
+            width: 0;
+            margin-right: 0;
+        }
+    }
+
+    .code-editor .cursor {
+        display: none;
+        background: var(--code-editor-fg);
+        height: 1rem;
+        width: 2px;
+        margin-right: -2px;
+        margin-bottom: -0.2rem;
+        margin-top: -0.8rem;
+        animation: cursor-blink var(--code-editor-blink-speed) steps(1, end) infinite;
+        position: relative;
+        white-space: normal;
+        user-select: none;
+    }
+    
+        .code-editor .cursor, .code-editor .cursor * {
+            user-select: none;
+        }
+
+        ::deep .cursor .keep-in {
+            margin-top: 1.1rem;
+            margin-left: 0.2rem;
+            z-index: 3;
+        }
+
+        .code-editor:focus .cursor {
+            display: inline-block;
+        }
+
+        .code-editor .cursor .cursor-content {
+            width: 26rem;
+            min-height: 4rem;
+            max-height: 14rem;
+            overflow: auto;
+            z-index: 3;
+
+            background: var(--code-editor-popup-bg);
+            border: 1px solid var(--code-editor-fg);
+            border-radius: var(--code-editor-radius);
+            border-top-left-radius: 0;
+
+            user-select: none;
+        }
+
+    .code-editor pre {
+        width: fit-content;
+        overflow: visible;
+    }
+
+        .code-editor pre > span {
+            z-index: 2;
+            position: relative;
+            padding-left: 0.25rem;
+            margin-left: -0.25rem;
+        }
+
