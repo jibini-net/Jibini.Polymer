@@ -56,7 +56,10 @@ public static class PatternExtensions
         var attributes = typeof(Token).GetField(token.ToString())!
             .GetCustomAttributes(typeof(PatternAttribute), false)
             as PatternAttribute[];
-        return (from it in attributes select it.Regex.CompileMemoized())
+
+        // Regex prefixed with '\G' to indicate "start at end of last match"
+        return (from it in attributes
+                select $"\\G({it.Regex})".CompileMemoized())
             .ToList();
     }
 }

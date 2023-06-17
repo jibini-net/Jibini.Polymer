@@ -16,5 +16,11 @@ public enum Token
     [Pattern(Regex = "fun")]
     Fun,
     [Pattern(Regex = "[A-Za-z_][A-Za-z0-9_]*")]
-    Ident
+    Ident,
+
+    // Whitespace is ignored
+    [Pattern(Regex = "\\s+")]
+    // Block comments are ignored
+    [Pattern(Regex = "\\/\\*(\\*(?!\\/)|[^*])*\\*\\/")]
+    Discard
 }

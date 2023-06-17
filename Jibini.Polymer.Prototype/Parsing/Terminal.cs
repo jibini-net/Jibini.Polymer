@@ -21,6 +21,7 @@ public class Terminal<T> : NonTerminal<T> where T : class?
         if (source.Next != terminal)
         {
             dto = default;
+            Valid = false;
             return false;
         }
         // Don't bother creating stub object instances
