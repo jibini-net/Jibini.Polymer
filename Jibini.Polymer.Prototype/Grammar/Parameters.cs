@@ -8,31 +8,35 @@ using static Token;
 public class ParameterDto
 {
     public IdentDto? Ident { get; set; }
-    public IdentDto? Type { get; set; }
+    public TypeDto? Type { get; set; }
 }
 
 public class Parameters : NonTerminal<List<ParameterDto>>
 {
-    public override bool TryMatch(TokenStream source, out List<ParameterDto>? dto)
+    override public bool TryMatch(TokenStream source, out List<ParameterDto>? dto)
     {
+        _ = MatchSeries(source, LParens);
+
         dto = new();
         while (source.Next != RParens)
         {
             var data = MatchSeries(source,
 
-                new Ident(), Colon, new Ident()
+                new Ident(), Colon, new Type()
 
             );
             dto.Add(new()
             {
                 Ident = data[0] as IdentDto,
-                Type = data[2] as IdentDto
+                Type = data[2] as TypeDto
             });
             if (source.Next != RParens)
             {
                 _ = MatchSeries(source, Comma);
             }
         }
+
+        _ = MatchSeries(source, RParens);
         return Valid;
     }
 }

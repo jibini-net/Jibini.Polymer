@@ -16,7 +16,7 @@ public class Terminal<T> : NonTerminal<T> where T : class?
         this.terminal = terminal;
     }
 
-    public override bool TryMatch(TokenStream source, out T? dto)
+    override public bool TryMatch(TokenStream source, out T? dto)
     {
         if (source.Next != terminal)
         {

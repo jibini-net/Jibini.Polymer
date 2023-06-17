@@ -13,6 +13,10 @@ public enum Token
     LParens,
     [Pattern(Regex = "\\)")]
     RParens,
+    [Pattern(Regex = "\\<")]
+    Lt,
+    [Pattern(Regex = "\\>")]
+    Gt,
     [Pattern(Regex = "\\,")]
     Comma,
     [Pattern(Regex = "\\:")]

@@ -12,7 +12,7 @@ fun HelloWorld()
 {
 }
 
-fun FooBar(thing: A, other_thing: B)
+fun FooBar(thing: A<Thing<float>>, other_thing: B<string>)
 {
     fun internalFunc(pars: C) { }
 }

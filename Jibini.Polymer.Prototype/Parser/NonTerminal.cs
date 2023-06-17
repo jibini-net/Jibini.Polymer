@@ -1,4 +1,5 @@
-﻿using Jibini.Polymer.Prototype.Lexer;
+﻿using Jibini.Polymer.Prototype.Grammar;
+using Jibini.Polymer.Prototype.Lexer;
 
 namespace Jibini.Polymer.Prototype.Parser;
 
@@ -10,19 +11,12 @@ namespace Jibini.Polymer.Prototype.Parser;
 /// </summary>
 public abstract class NonTerminal
 {
-    // Allows tokens to be placed inline with non-terminals in a collection
+    /// <summary>
+    /// Allows tokens to be placed inline with non-terminals in a collection.
+    /// </summary>
+    /// <param name="token">Token enum value to match in source.</param>
     public static implicit operator NonTerminal(Token token) =>
         new Terminal<object?>(token);
-
-    /// <summary>
-    /// Wraps a token such that it will be parsed out into the DTO collection
-    /// with a certain type, using the DTO type's constructor.
-    /// </summary>
-    /// <typeparam name="T">DTO type which will be instantiated during parsing.</typeparam>
-    /// <param name="token">Stream from which tokens are consumed.</param>
-    /// <returns>A trivial non-terminal wrapper for the terminal token.</returns>
-    public static Terminal<T> To<T>(Token token) where T : class? =>
-        new(token);
 
     /// <summary>
     /// Attempts to parse the provided source stream as this type of non-
@@ -43,6 +37,12 @@ public abstract class NonTerminal
     {
         foreach (var nonTerm in series)
         {
+            // After first failure, attempt no further matches
+            if (!Valid)
+            {
+                yield return null;
+                continue;
+            }
             Valid &= nonTerm.TryMatch(source, out var dto);
             yield return dto;
         }
@@ -67,6 +67,11 @@ public abstract class NonTerminal
     /// <returns>Resulting DTO from any successfully matched member.</returns>
     protected object? MatchOptions(TokenStream source, params NonTerminal[] options)
     {
+        // After first failure, attempt no further matches
+        if (!Valid)
+        {
+            return null;
+        }
         // TODO Currently doesn't support backtracking, for now ensure unique
         // first sets.
         foreach (var nonTerm in options)
@@ -88,7 +93,7 @@ public abstract class NonTerminal
 /// <typeparam name="T">DTO type corresponding to parsed out details.</typeparam>
 public abstract class NonTerminal<T> : NonTerminal where T : class?
 {
-    public override bool TryMatch(TokenStream source, out object? dto)
+    override public bool TryMatch(TokenStream source, out object? dto)
     {
         var result = TryMatch(source, out T? _dto);
         dto = _dto;

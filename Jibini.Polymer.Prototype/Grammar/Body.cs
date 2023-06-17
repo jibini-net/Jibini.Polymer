@@ -14,7 +14,7 @@ public class BodyDto : StatementDto
 
 public class Body : NonTerminal<BodyDto>
 {
-    public override bool TryMatch(TokenStream source, out BodyDto? dto)
+    override public bool TryMatch(TokenStream source, out BodyDto? dto)
     {
         var data = MatchSeries(source,
 

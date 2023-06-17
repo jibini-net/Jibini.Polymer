@@ -12,7 +12,7 @@ public abstract class StatementDto
 
 public class Statements : NonTerminal<List<StatementDto>>
 {
-    public override bool TryMatch(TokenStream source, out List<StatementDto>? dto)
+    override public bool TryMatch(TokenStream source, out List<StatementDto>? dto)
     {
         dto = new();
         while ((source.Next ?? RCurly) != RCurly)
