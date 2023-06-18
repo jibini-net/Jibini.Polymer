@@ -8,7 +8,7 @@ internal class Program
     static void Main(string[] args)
     {
         var sourceText = @"
-fun HelloWorld<T>() : IUserOf<T>
+fun HelloWorld<T>(): IUserOf<T>
 {
 }
 

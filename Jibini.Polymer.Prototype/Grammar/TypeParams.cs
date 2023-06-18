@@ -5,9 +5,9 @@ namespace Jibini.Polymer.Prototype.Grammar;
 
 using static Token;
 
-public class TypeParameters : NonTerminal<List<TypeDto?>>
+public class TypeParameters : NonTerminal<List<TypeDto>>
 {
-    override public bool TryMatch(TokenStream source, out List<TypeDto?>? dto)
+    override public bool TryMatch(TokenStream source, out List<TypeDto>? dto)
     {
         _ = MatchSeries(source, Lt);
 
@@ -15,7 +15,7 @@ public class TypeParameters : NonTerminal<List<TypeDto?>>
         while (Valid && source.Next != Gt)
         {
             var data = MatchSeries(source, new Type());
-            dto.Add(data[0] as TypeDto);
+            dto.Add((data[0] as TypeDto)!);
 
             if (source.Next != Gt)
             {

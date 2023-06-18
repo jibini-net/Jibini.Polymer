@@ -91,6 +91,12 @@ public abstract class NonTerminal
         }
         return MatchOptionsIgnoreInvalid(source, options);
     }
+
+    /// <summary>
+    /// Represents an option which will match blankness (always matches), and
+    /// always has the null-DTO.
+    /// </summary>
+    protected NonTerminal Epsilon => new Epsilon();
 }
 
 /// <summary>
