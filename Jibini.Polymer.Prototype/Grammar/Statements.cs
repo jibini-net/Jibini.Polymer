@@ -7,7 +7,7 @@ using static Token;
 
 public abstract class StatementDto
 {
-    public abstract string Type { get; }
+    public abstract string _Type { get; }
 }
 
 public class Statements : NonTerminal<List<StatementDto>>
@@ -26,8 +26,9 @@ public class Statements : NonTerminal<List<StatementDto>>
         while (/*Valid && */(source.Next ?? endToken) != endToken)
         {
             int startPos = source.Offset;
-            var data = MatchOptionsIgnoreInvalid(source,
+            var data = MatchOptions(source,
                 new Function(),
+                new Declaration(),
                 new Body(),
                 Semic)
                 as StatementDto;

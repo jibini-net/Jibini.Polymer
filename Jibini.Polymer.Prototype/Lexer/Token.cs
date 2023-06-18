@@ -23,8 +23,12 @@ public enum Token
     Colon,
     [Pattern(Regex = "\\;")]
     Semic,
+    [Pattern(Regex = "\\=")]
+    Equal,
     [Pattern(Regex = "fun")]
     Fun,
+    [Pattern(Regex = "var")]
+    Var,
     [Pattern(Regex = "[A-Za-z_][A-Za-z0-9_]*")]
     Ident,
 

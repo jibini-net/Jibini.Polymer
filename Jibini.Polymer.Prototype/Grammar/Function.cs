@@ -7,7 +7,7 @@ using static Token;
 
 public class FunctionDto : StatementDto
 {
-    override public string Type => "Function";
+    override public string _Type => "Function";
 
     public string Name { get; set; } = "";
     public List<TypeDto>? TypeParams { get; set; }
@@ -20,6 +20,11 @@ public class Function : NonTerminal<FunctionDto>
 {
     override public bool TryMatch(TokenStream source, out FunctionDto? dto)
     {
+        if (source.Next != Fun)
+        {
+            dto = null;
+            return Valid = false;
+        }
         var data = MatchSeries(source,
             Fun, new Ident()
             );
@@ -28,10 +33,11 @@ public class Function : NonTerminal<FunctionDto>
             Name = (data[1] as IdentDto)?.Name ?? ""
         };
 
-        dto.TypeParams = MatchOptions(source,
-            new TypeParameters(),
-            Epsilon)
-            as List<TypeDto>;
+        if (source.Next == Lt)
+        {
+            data = MatchSeries(source, new TypeParams());
+            dto.TypeParams = (data[0] as List<TypeDto>)!;
+        }
 
         data = MatchSeries(source, new Parameters());
         dto.Parameters = (data[0] as List<ParameterDto>)!;
@@ -41,7 +47,7 @@ public class Function : NonTerminal<FunctionDto>
             data = MatchSeries(source,
                 Colon, new Type()
                 );
-            dto.ReturnType = data[1] as TypeDto;
+            dto.ReturnType = (data[1] as TypeDto)!;
         }
 
         data = MatchSeries(source, new Body());

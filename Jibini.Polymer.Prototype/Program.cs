@@ -9,8 +9,11 @@ internal class Program
     static void Main(string[] args)
     {
         var sourceText = @"
-fun HelloWorld<T>(): IUserOf<T>
+fun HelloWorld<T>(a: int): IUserOf<T>
 {
+    var b = a;
+    var c: int;
+    var d: int = b;
 }
 
 fun FooBar(thing: A<Thing<float>>, other_thing: B<string, int>)

@@ -37,11 +37,6 @@ public abstract class NonTerminal
     {
         foreach (var nonTerm in series)
         {
-            if (!Valid)
-            {
-                yield return null;
-                continue;
-            }
             Valid &= nonTerm.TryMatch(source, out var dto);
             yield return dto;
         }
@@ -57,7 +52,14 @@ public abstract class NonTerminal
     protected IList<object?> MatchSeries(TokenStream source, params NonTerminal[] series) =>
         _MatchSeries(source, series).ToList();
 
-    protected object? MatchOptionsIgnoreInvalid(TokenStream source, params NonTerminal[] options)
+    /// <summary>
+    /// Checks a set of non-terminal actions, expecting at least one will
+    /// successfully match.
+    /// </summary>
+    /// <param name="source">Stream from which tokens are consumed.</param>
+    /// <param name="options">Possible next non-terminals to try matching.</param>
+    /// <returns>Resulting DTO from any successfully matched member.</returns>
+    protected object? MatchOptions(TokenStream source, params NonTerminal[] options)
     {
         var restorePoint = source.Offset;
         foreach (var nonTerm in options)
@@ -74,29 +76,6 @@ public abstract class NonTerminal
         Valid = false;
         return null;
     }
-
-    /// <summary>
-    /// Checks a set of non-terminal actions, expecting at least one will
-    /// successfully match.
-    /// </summary>
-    /// <param name="source">Stream from which tokens are consumed.</param>
-    /// <param name="options">Possible next non-terminals to try matching.</param>
-    /// <returns>Resulting DTO from any successfully matched member.</returns>
-    protected object? MatchOptions(TokenStream source, params NonTerminal[] options)
-    {
-        // After first failure, attempt no further matches
-        if (!Valid)
-        {
-            return null;
-        }
-        return MatchOptionsIgnoreInvalid(source, options);
-    }
-
-    /// <summary>
-    /// Represents an option which will match blankness (always matches), and
-    /// always has the null-DTO.
-    /// </summary>
-    protected NonTerminal Epsilon => new Epsilon();
 }
 
 /// <summary>

@@ -9,6 +9,11 @@ public class TokenStream
     // In-memory copy of source which will be parsed
     private readonly string source;
     /// <summary>
+    /// Provides access to a substring of remaining source, primarily for
+    /// debugging purposes.
+    /// </summary>
+    public string Remaining => source.Substring(Offset);
+    /// <summary>
     /// Character position within the input source. Can be manually set.
     /// </summary>
     public int Offset { get; set; } = 0;

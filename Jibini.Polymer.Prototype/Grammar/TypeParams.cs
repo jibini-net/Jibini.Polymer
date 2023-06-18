@@ -5,10 +5,15 @@ namespace Jibini.Polymer.Prototype.Grammar;
 
 using static Token;
 
-public class TypeParameters : NonTerminal<List<TypeDto>>
+public class TypeParams : NonTerminal<List<TypeDto>>
 {
     override public bool TryMatch(TokenStream source, out List<TypeDto>? dto)
     {
+        if (source.Next != Lt)
+        {
+            dto = null;
+            return Valid = false;
+        }
         _ = MatchSeries(source, Lt);
 
         dto = new();
