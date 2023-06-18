@@ -22,7 +22,8 @@ public class Statements : NonTerminal<List<StatementDto>>
     override public bool TryMatch(TokenStream source, out List<StatementDto>? dto)
     {
         dto = new();
-        while (/*Valid && */source.Next != endToken)
+        // Cascaded value should help protect against polling EOF
+        while (/*Valid && */(source.Next ?? endToken) != endToken)
         {
             int startPos = source.Offset;
             var data = MatchOptionsIgnoreInvalid(source,

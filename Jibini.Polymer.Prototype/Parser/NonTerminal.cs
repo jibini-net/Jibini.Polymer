@@ -59,13 +59,16 @@ public abstract class NonTerminal
 
     protected object? MatchOptionsIgnoreInvalid(TokenStream source, params NonTerminal[] options)
     {
-        // TODO Currently doesn't support backtracking, for now ensure unique
-        // first sets.
+        var restorePoint = source.Offset;
         foreach (var nonTerm in options)
         {
             if (nonTerm.TryMatch(source, out var dto))
             {
                 return dto;
+            } else
+            {
+                // "Backtracking"
+                source.Offset = restorePoint;
             }
         }
         Valid = false;

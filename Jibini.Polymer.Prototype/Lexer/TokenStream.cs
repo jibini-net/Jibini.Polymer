@@ -9,9 +9,9 @@ public class TokenStream
     // In-memory copy of source which will be parsed
     private readonly string source;
     /// <summary>
-    /// Character position within the input source.
+    /// Character position within the input source. Can be manually set.
     /// </summary>
-    public int Offset { get; private set; } = 0;
+    public int Offset { get; set; } = 0;
 
     // Stores the last peeked token to only peek once
     private Token? token;
