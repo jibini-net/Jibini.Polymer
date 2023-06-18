@@ -45,7 +45,7 @@ public class Function : NonTerminal<FunctionDto>
         }
 
         data = MatchSeries(source, new Body());
-        dto.Body = data[0] as BodyDto;
+        dto.Body = (data[0] as BodyDto)!;
         return Valid;
     }
 }

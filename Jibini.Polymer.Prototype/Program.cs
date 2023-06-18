@@ -1,5 +1,6 @@
 ﻿using Jibini.Polymer.Prototype.Grammar;
 using Jibini.Polymer.Prototype.Lexer;
+using Newtonsoft.Json;
 
 namespace Jibini.Polymer.Prototype;
 
@@ -12,12 +13,6 @@ fun HelloWorld<T>(): IUserOf<T>
 {
 }
 
-/*
-fun Broken(thing: A<Thing<float>>, other_thing: B<string>) :
-{
-}
-*/
-
 fun FooBar(thing: A<Thing<float>>, other_thing: B<string, int>)
 {
     fun internalFunc(pars: C) { }
@@ -27,6 +22,6 @@ fun FooBar(thing: A<Thing<float>>, other_thing: B<string, int>)
         var success = new Statements(endToken: null).TryMatch(source, out var dto);
 
         Console.WriteLine(success);
-        Console.WriteLine(dto);
+        Console.WriteLine(JsonConvert.SerializeObject(dto, Formatting.Indented));
     }
 }
