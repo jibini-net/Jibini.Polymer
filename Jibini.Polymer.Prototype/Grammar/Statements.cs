@@ -27,7 +27,8 @@ public class Statements : NonTerminal<List<StatementDto>>
             int startPos = source.Offset;
             var data = MatchOptionsIgnoreInvalid(source,
                 new Function(),
-                new Body())
+                new Body(),
+                Semic)
                 as StatementDto;
 
             // Error recovery boundary, nobody's consuming tokens or bailing out

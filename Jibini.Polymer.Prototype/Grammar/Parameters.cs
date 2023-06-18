@@ -7,7 +7,7 @@ using static Token;
 
 public class ParameterDto
 {
-    public IdentDto? Ident { get; set; }
+    public string? Name { get; set; }
     public TypeDto? Type { get; set; }
 }
 
@@ -21,13 +21,11 @@ public class Parameters : NonTerminal<List<ParameterDto>>
         while (Valid && source.Next != RParens)
         {
             var data = MatchSeries(source,
-
                 new Ident(), Colon, new Type()
-
-            );
+                );
             dto.Add(new()
             {
-                Ident = data[0] as IdentDto,
+                Name = (data[0] as IdentDto)?.Name,
                 Type = data[2] as TypeDto
             });
 

@@ -12,12 +12,14 @@ fun HelloWorld()
 {
 }
 
-fun Broken(thing: A<Thing<float>>, other_thing: B<string>)
+/*
+fun Broken(thing: A<Thing<float>>, other_thing: B<string
 {
     fun internalFunc(pars: C) { }
 }
+*/
 
-fun FooBar(thing: A<Thing<float>>, other_thing: B<string>)
+fun FooBar(thing: A<Thing<float>>, other_thing: B<string, int>)
 {
     fun internalFunc(pars: C) { }
 }

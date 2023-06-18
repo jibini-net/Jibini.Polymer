@@ -17,13 +17,9 @@ public class Body : NonTerminal<BodyDto>
     override public bool TryMatch(TokenStream source, out BodyDto? dto)
     {
         var data = MatchSeries(source,
-
             LCurly,
-
                 new Statements(endToken: RCurly),
-
             RCurly
-
             );
         dto = new()
         {
