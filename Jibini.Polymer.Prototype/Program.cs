@@ -8,13 +8,12 @@ internal class Program
     static void Main(string[] args)
     {
         var sourceText = @"
-fun HelloWorld()
+fun HelloWorld<T>() : IUserOf<T>
 {
 }
 
-fun Broken(thing: A<Thing<float>>, other_thing: B<string
+fun Broken(thing: A<Thing<float>>, other_thing: B<string>) :
 {
-    fun internalFunc(pars: C) { }
 }
 
 fun FooBar(thing: A<Thing<float>>, other_thing: B<string, int>)

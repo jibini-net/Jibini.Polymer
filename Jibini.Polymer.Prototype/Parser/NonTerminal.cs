@@ -89,7 +89,7 @@ public abstract class NonTerminal
         {
             return null;
         }
-        return MatchOptions(source, options);
+        return MatchOptionsIgnoreInvalid(source, options);
     }
 }
 

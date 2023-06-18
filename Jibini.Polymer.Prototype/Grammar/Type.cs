@@ -20,6 +20,7 @@ public class Type : NonTerminal<TypeDto>
         {
             Name = (data[0] as IdentDto)?.Name
         };
+
         if (source.Next == Lt)
         {
             data = MatchSeries(source, new TypeParameters());
