@@ -9,11 +9,11 @@ public class FunctionDto : StatementDto
 {
     override public string Type => "Function";
 
-    public string? Name { get; set; }
+    public string Name { get; set; } = "";
     public List<TypeDto>? TypeParams { get; set; }
-    public List<ParameterDto>? Parameters { get; set; }
+    public List<ParameterDto> Parameters { get; set; } = new();
     public TypeDto? ReturnType { get; set; }
-    public BodyDto? Body { get; set; }
+    public BodyDto Body { get; set; } = new();
 }
 
 public class Function : NonTerminal<FunctionDto>
@@ -25,7 +25,7 @@ public class Function : NonTerminal<FunctionDto>
             );
         dto = new()
         {
-            Name = (data[1] as IdentDto)?.Name
+            Name = (data[1] as IdentDto)?.Name ?? ""
         };
 
         dto.TypeParams = MatchOptions(source,
@@ -34,7 +34,7 @@ public class Function : NonTerminal<FunctionDto>
             as List<TypeDto>;
 
         data = MatchSeries(source, new Parameters());
-        dto.Parameters = data[0] as List<ParameterDto>;
+        dto.Parameters = (data[0] as List<ParameterDto>)!;
         
         if (source.Next == Colon)
         {

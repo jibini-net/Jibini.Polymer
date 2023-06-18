@@ -12,9 +12,11 @@ fun HelloWorld<T>(): IUserOf<T>
 {
 }
 
+/*
 fun Broken(thing: A<Thing<float>>, other_thing: B<string>) :
 {
 }
+*/
 
 fun FooBar(thing: A<Thing<float>>, other_thing: B<string, int>)
 {

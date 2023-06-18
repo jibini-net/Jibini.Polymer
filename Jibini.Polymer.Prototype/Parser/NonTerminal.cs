@@ -16,7 +16,7 @@ public abstract class NonTerminal
     /// </summary>
     /// <param name="token">Token enum value to match in source.</param>
     public static implicit operator NonTerminal(Token token) =>
-        new Terminal<object?>(token);
+        new Terminal<object>(token);
 
     /// <summary>
     /// Attempts to parse the provided source stream as this type of non-
@@ -104,7 +104,7 @@ public abstract class NonTerminal
 /// in abstract syntax definition.
 /// </summary>
 /// <typeparam name="T">DTO type corresponding to parsed out details.</typeparam>
-public abstract class NonTerminal<T> : NonTerminal where T : class?
+public abstract class NonTerminal<T> : NonTerminal where T : class
 {
     override public bool TryMatch(TokenStream source, out object? dto)
     {

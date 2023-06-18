@@ -7,8 +7,8 @@ using static Token;
 
 public class ParameterDto
 {
-    public string? Name { get; set; }
-    public TypeDto? Type { get; set; }
+    public string Name { get; set; } = "";
+    public TypeDto Type { get; set; } = new();
 }
 
 public class Parameters : NonTerminal<List<ParameterDto>>
@@ -25,8 +25,8 @@ public class Parameters : NonTerminal<List<ParameterDto>>
                 );
             dto.Add(new()
             {
-                Name = (data[0] as IdentDto)?.Name,
-                Type = data[2] as TypeDto
+                Name = (data[0] as IdentDto)?.Name ?? "",
+                Type = (data[2] as TypeDto)!
             });
 
             if (source.Next != RParens)

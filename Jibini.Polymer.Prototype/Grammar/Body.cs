@@ -9,7 +9,7 @@ public class BodyDto : StatementDto
 {
     override public string Type => "Body";
 
-    public List<StatementDto>? Statements { get; set; }
+    public List<StatementDto> Statements { get; set; } = new();
 }
 
 public class Body : NonTerminal<BodyDto>
@@ -23,7 +23,7 @@ public class Body : NonTerminal<BodyDto>
             );
         dto = new()
         {
-            Statements = data[1] as List<StatementDto>
+            Statements = (data[1] as List<StatementDto>)!
         };
         return Valid;
     }

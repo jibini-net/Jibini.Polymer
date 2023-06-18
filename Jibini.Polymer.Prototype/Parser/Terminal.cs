@@ -7,7 +7,7 @@ namespace Jibini.Polymer.Prototype.Parser;
 /// syntax tree. Creates an object containing names, types, and other details.
 /// </summary>
 /// <typeparam name="T">DTO class which will be instantiated with details.</typeparam>
-public class Terminal<T> : NonTerminal<T> where T : class?
+public class Terminal<T> : NonTerminal<T> where T : class
 {
     private readonly Token terminal;
 
