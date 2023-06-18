@@ -3,8 +3,10 @@ using Jibini.Polymer.Prototype.Parser;
 
 namespace Jibini.Polymer.Prototype.Grammar;
 
-public class IdentDto
+public class IdentDto : ExpressionDto
 {
+    public override string _Type => "Ident";
+
     public string Name { get; set; } = "";
 
     public IdentDto()

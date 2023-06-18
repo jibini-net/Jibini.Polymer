@@ -18,7 +18,7 @@ public class Body : NonTerminal<BodyDto>
     {
         if (source.Next != LCurly)
         {
-            dto = null;
+            dto = new();
             return Valid = false;
         }
         var data = MatchSeries(source,

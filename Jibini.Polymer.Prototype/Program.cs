@@ -9,16 +9,12 @@ internal class Program
     static void Main(string[] args)
     {
         var sourceText = @"
-fun HelloWorld<T>(a: int): IUserOf<T>
+fun FooBar<A, B, C>(thing: A<B<C>>, other_thing: Map<string, int>)
 {
+    fun internalFunc(pars: C) { }
     var b = a;
     var c: int;
     var d: int = b;
-}
-
-fun FooBar(thing: A<Thing<float>>, other_thing: B<string, int>)
-{
-    fun internalFunc(pars: C) { }
 }
             ".Trim();
         var source = new TokenStream(sourceText);

@@ -15,11 +15,6 @@ public class Parameters : NonTerminal<List<ParameterDto>>
 {
     override public bool TryMatch(TokenStream source, out List<ParameterDto>? dto)
     {
-        if (source.Next != LParens)
-        {
-            dto = null;
-            return Valid = false;
-        }
         _ = MatchSeries(source, LParens);
 
         dto = new();

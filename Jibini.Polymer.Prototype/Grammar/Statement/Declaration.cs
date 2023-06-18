@@ -19,11 +19,6 @@ public class Declaration : NonTerminal<DeclarationDto>
 {
     override public bool TryMatch(TokenStream source, out DeclarationDto? dto)
     {
-        if (source.Next != Var)
-        {
-            dto = null;
-            return Valid = false;
-        }
         var data = MatchSeries(source,
             Var, new Ident()
             );

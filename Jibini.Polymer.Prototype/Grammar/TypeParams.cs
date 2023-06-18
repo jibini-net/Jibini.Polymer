@@ -9,11 +9,6 @@ public class TypeParams : NonTerminal<List<TypeDto>>
 {
     override public bool TryMatch(TokenStream source, out List<TypeDto>? dto)
     {
-        if (source.Next != Lt)
-        {
-            dto = null;
-            return Valid = false;
-        }
         _ = MatchSeries(source, Lt);
 
         dto = new();

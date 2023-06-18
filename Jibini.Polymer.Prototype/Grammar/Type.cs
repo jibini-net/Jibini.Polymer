@@ -15,11 +15,6 @@ public class Type : NonTerminal<TypeDto>
 {
     override public bool TryMatch(TokenStream source, out TypeDto? dto)
     {
-        if (source.Next != Token.Ident)
-        {
-            dto = null;
-            return Valid = false;
-        }
         var data = MatchSeries(source, new Ident());
         dto = new()
         {

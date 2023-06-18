@@ -20,11 +20,6 @@ public class Function : NonTerminal<FunctionDto>
 {
     override public bool TryMatch(TokenStream source, out FunctionDto? dto)
     {
-        if (source.Next != Fun)
-        {
-            dto = null;
-            return Valid = false;
-        }
         var data = MatchSeries(source,
             Fun, new Ident()
             );
