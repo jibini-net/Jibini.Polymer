@@ -1,40 +1,39 @@
 ﻿using Jibini.Polymer.Prototype.Grammar;
 using Jibini.Polymer.Prototype.Lexer;
-using Newtonsoft.Json;
 
 namespace Jibini.Polymer.Prototype;
 
 internal class Program
 {
-    static void Main(string[] args)
+    static void Main(string[] _)
     {
-        var sourceText = @"
-fun FooBar<A, B, C>(thing: List<A, Map<B, C>>): string
+        // Ensure tokens are compiled beforehand
+        ".*".CompileMemoized();
+
+        var time = DateTime.Now;
+        var success = new Statements(endToken: null)
+            .TryMatch(@"
+
+var container: Container<dynamic> = new;
+var zero: int;
+var globalCount = zero;
+
+fun DoWork(b: int)
 {
-    fun internalFunc(pars: C) { }
-
-    var b = a;
-    var c: int;
-    var d: int = b;
-
-    a; b; c; d;
-    a.b = c(d).e(f, g);
-    
-    var test_a: string;
-    test_a = a.ToString();
-    var test_b = b.ToString();
-
-    a.b = c^b.d^e()^f;
+    var i: int;
+    fun changeValue(): int
+    {
+        i = globalCount + b;
+        return = i;
+    }
+    container.Value = changeValue;
+    container.Value();
 }
 
-var test: int;
-test = a * b.c()^!d.e + !thing / a^b^c + thing;
-test = a * (b.c()^!(d.e + !thing / ((a^b)^c + thing)));
-            ".Trim();
-        var source = new TokenStream(sourceText);
-        var success = new Statements(endToken: null).TryMatch(source, out var dto);
+                ",
+                out var _);
 
-        Console.WriteLine(success);
-        Console.WriteLine(JsonConvert.SerializeObject(dto, Formatting.Indented));
+        Console.WriteLine($"Completed in {(DateTime.Now - time).TotalMilliseconds}ms");
+        Console.WriteLine($"Valid: {success}");
     }
 }

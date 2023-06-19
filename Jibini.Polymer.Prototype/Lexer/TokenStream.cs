@@ -6,6 +6,13 @@
 /// </summary>
 public class TokenStream
 {
+    /// <summary>
+    /// Allows a string to be used automatically as a "token stream."
+    /// </summary>
+    /// <param name="sourceText">Text content of the input source.</param>
+    public static implicit operator TokenStream(string sourceText) =>
+        new(sourceText);
+
     // In-memory copy of source which will be parsed
     private readonly string source;
     /// <summary>

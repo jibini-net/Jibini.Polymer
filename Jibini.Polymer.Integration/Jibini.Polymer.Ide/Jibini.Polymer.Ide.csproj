@@ -6,4 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Jibini.Polymer.Prototype\Jibini.Polymer.Prototype.csproj" />
+  </ItemGroup>
+
 </Project>
