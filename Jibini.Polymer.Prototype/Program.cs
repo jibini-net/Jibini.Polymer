@@ -19,7 +19,7 @@ fun FooBar<A, B, C>(thing: A<B<C>>, other_thing: Map<string, int>)
 
     a; b; c; d;
     a = b = c = d();
-    a(b, c, d);
+    a.b(c, d);
 }
             ".Trim();
         var source = new TokenStream(sourceText);

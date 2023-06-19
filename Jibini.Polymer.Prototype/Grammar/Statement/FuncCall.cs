@@ -18,14 +18,9 @@ public class FuncCall : NonTerminal<FuncCallDto>
 {
     override public bool TryMatch(TokenStream source, out FuncCallDto? dto)
     {
-        var data = MatchSeries(source,
-            new ExpressionA(), LParens
-            );
-        dto = new()
-        {
-            Target = data[0] as ExpressionDto
-        };
+        _ = MatchSeries(source, LParens);
 
+        dto = new();
         while (Valid && source.Next != RParens)
         {
             var expr = MatchOptions(source, new Expression());

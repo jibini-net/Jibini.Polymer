@@ -25,6 +25,8 @@ public enum Token
     Semic,
     [Pattern(Regex = "\\=")]
     Equal,
+    [Pattern(Regex = "\\.")]
+    Dot,
     [Pattern(Regex = "fun")]
     Fun,
     [Pattern(Regex = "var")]
