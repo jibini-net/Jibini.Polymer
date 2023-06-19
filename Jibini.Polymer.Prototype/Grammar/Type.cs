@@ -24,7 +24,7 @@ public class Type : NonTerminal<TypeDto>
         if (source.Next == Lt)
         {
             data = MatchSeries(source, new TypeParams());
-            dto.TypeParams = (data[0] as List<TypeDto>)!;
+            dto.TypeParams = data[0] as List<TypeDto>;
         }
         return Valid;
     }

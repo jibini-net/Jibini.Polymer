@@ -31,7 +31,7 @@ public class Function : NonTerminal<FunctionDto>
         if (source.Next == Lt)
         {
             data = MatchSeries(source, new TypeParams());
-            dto.TypeParams = (data[0] as List<TypeDto>)!;
+            dto.TypeParams = data[0] as List<TypeDto>;
         }
 
         data = MatchSeries(source, new Parameters());
@@ -42,7 +42,7 @@ public class Function : NonTerminal<FunctionDto>
             data = MatchSeries(source,
                 Colon, new Type()
                 );
-            dto.ReturnType = (data[1] as TypeDto)!;
+            dto.ReturnType = data[1] as TypeDto;
         }
 
         data = MatchSeries(source, new Body());

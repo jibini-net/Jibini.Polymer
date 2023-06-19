@@ -30,6 +30,7 @@ public class Statements : NonTerminal<List<StatementDto>>
                 new Function(),
                 new Declaration(),
                 new Body(),
+                new ExprStatement(),
                 Semic)
                 as StatementDto;
 

@@ -11,8 +11,7 @@ public class DeclarationDto : StatementDto
 
     public string Name { get; set; } = "";
     public TypeDto? Type { get; set; }
-    // TODO
-    public IdentDto? InitialValue { get; set; }
+    public ExpressionDto? InitialValue { get; set; }
 }
 
 public class Declaration : NonTerminal<DeclarationDto>
@@ -32,16 +31,15 @@ public class Declaration : NonTerminal<DeclarationDto>
             data = MatchSeries(source,
                 Colon, new Type()
                 );
-            dto.Type = (data[1] as TypeDto)!;
+            dto.Type = data[1] as TypeDto;
         }
 
         if (source.Next == Equal)
         {
-            // TODO
             data = MatchSeries(source,
-                Equal, new Ident()
+                Equal, new Expression()
                 );
-            dto.InitialValue = data[1] as IdentDto;
+            dto.InitialValue = data[1] as ExpressionDto;
         }
 
         _ = MatchSeries(source, Semic);

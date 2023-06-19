@@ -13,10 +13,21 @@ public class TokenStream
     /// debugging purposes.
     /// </summary>
     public string Remaining => source.Substring(Offset);
+
+    private int offset = 0;
     /// <summary>
     /// Character position within the input source. Can be manually set.
     /// </summary>
-    public int Offset { get; set; } = 0;
+    public int Offset
+    {
+        get => offset;
+        set 
+        {
+            offset = value;
+            token = null;
+            _ = Next;
+        }
+    }
 
     // Stores the last peeked token to only peek once
     private Token? token;
@@ -39,8 +50,13 @@ public class TokenStream
     /// </summary>
     /// <returns>A matched token at the current stream position.</returns>
     /// <exception cref="Exception">If no token could be matched here.</exception>
-    private Token _Peek()
+    private Token? _Peek()
     {
+        if (Offset >= source.Length)
+        {
+            // EOF
+            return null;
+        }
         // Tokens are ordered statically in the intended evaluation order
         foreach (var tok in Enum.GetValues<Token>())
         {

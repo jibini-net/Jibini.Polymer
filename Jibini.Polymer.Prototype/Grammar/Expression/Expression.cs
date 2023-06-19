@@ -10,31 +10,36 @@ public abstract class ExpressionDto
     public abstract string _Type { get; }
 }
 
-public abstract class UnaryExpressionDto : ExpressionDto
-{
-    public ExpressionDto? Expr { get; set; }
-}
-
-public abstract class BiExpressionDto : ExpressionDto
-{
-    public ExpressionDto? Left { get; set; }
-    public ExpressionDto? Right { get; set; }
-}
-
 public class Expression : NonTerminal<ExpressionDto>
 {
-    private readonly Token? endToken;
-
-    public Expression(Token? endToken)
-    {
-        this.endToken = endToken;
-    }
-
     override public bool TryMatch(TokenStream source, out ExpressionDto? dto)
     {
         dto = MatchOptions(source,
+            new Assignment(),
             new Ident())
             as ExpressionDto;
+        return Valid;
+    }
+}
+
+public class ExprStatementDto : StatementDto
+{
+    public override string _Type => "Expr";
+
+    public ExpressionDto? Expr { get; set; }
+}
+
+public class ExprStatement : NonTerminal<ExprStatementDto>
+{
+    override public bool TryMatch(TokenStream source, out ExprStatementDto? dto)
+    {
+        var data = MatchSeries(source,
+            new Expression(), Semic
+            );
+        dto = new()
+        {
+            Expr = data[0] as ExpressionDto
+        };
         return Valid;
     }
 }

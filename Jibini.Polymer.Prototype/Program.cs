@@ -12,9 +12,13 @@ internal class Program
 fun FooBar<A, B, C>(thing: A<B<C>>, other_thing: Map<string, int>)
 {
     fun internalFunc(pars: C) { }
+
     var b = a;
     var c: int;
     var d: int = b;
+
+    a; b; c; d;
+    a = b = c = d;
 }
             ".Trim();
         var source = new TokenStream(sourceText);
