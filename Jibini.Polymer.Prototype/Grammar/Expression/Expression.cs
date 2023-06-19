@@ -10,13 +10,36 @@ public abstract class ExpressionDto
     public abstract string _Type { get; }
 }
 
+public class ExpressionA : NonTerminal<ExpressionDto>
+{
+    override public bool TryMatch(TokenStream source, out ExpressionDto? dto)
+    {
+        dto = MatchOptions(source,
+            new Ident())
+            as ExpressionDto;
+        return Valid;
+    }
+}
+
+public class ExpressionB : NonTerminal<ExpressionDto>
+{
+    override public bool TryMatch(TokenStream source, out ExpressionDto? dto)
+    {
+        dto = MatchOptions(source,
+            new FuncCall(),
+            new ExpressionA())
+            as ExpressionDto;
+        return Valid;
+    }
+}
+
 public class Expression : NonTerminal<ExpressionDto>
 {
     override public bool TryMatch(TokenStream source, out ExpressionDto? dto)
     {
         dto = MatchOptions(source,
             new Assignment(),
-            new Ident())
+            new ExpressionB())
             as ExpressionDto;
         return Valid;
     }

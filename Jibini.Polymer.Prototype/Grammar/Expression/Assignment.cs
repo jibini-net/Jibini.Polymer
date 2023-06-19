@@ -9,7 +9,7 @@ public class AssignmentDto : ExpressionDto
 {
     override public string _Type => "Assignment";
 
-    public string Name { get; set; } = "";
+    public ExpressionDto? Target { get; set; }
     public ExpressionDto? Value { get; set; }
 }
 
@@ -18,11 +18,11 @@ public class Assignment : NonTerminal<AssignmentDto>
     override public bool TryMatch(TokenStream source, out AssignmentDto? dto)
     {
         var data = MatchSeries(source,
-            new Ident(), Equal
+            new ExpressionA(), Equal
             );
         dto = new()
         {
-            Name = (data[0] as IdentDto)?.Name ?? ""
+            Target = data[0] as ExpressionDto
         };
 
         if (Valid)
