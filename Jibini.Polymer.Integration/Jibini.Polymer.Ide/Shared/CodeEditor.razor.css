@@ -89,3 +89,12 @@
             margin-left: -0.25rem;
         }
 
+.ch_Ident
+{
+    color: #aea9fd;
+}
+
+.ch_Fun, .ch_Var
+{
+    color: #1a6789
+}

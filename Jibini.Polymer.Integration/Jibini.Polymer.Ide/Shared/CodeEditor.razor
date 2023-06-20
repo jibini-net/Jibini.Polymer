@@ -1,17 +1,32 @@
-﻿@inject IJSRuntime js
+﻿@using Jibini.Polymer.Prototype.Grammar
+@using Jibini.Polymer.Prototype.Lexer
+@using Newtonsoft.Json
+@inject IJSRuntime js
 
 <KeepWithin>
     <div class="code-editor" @ref="@editorPane"
         tabindex="1" contenteditable="true">
 
         @{
+            TokenStream source = RawContent;
             var cIndex = 0;
+            var tokenStart = 0;
+
             Func<string, RenderFragment> stringContent = (s) =>
                 @<text>
                     @foreach (var c in s)
                     {
                         var i = cIndex++;
-                        <span @onclick="@(async () => await MoveCursorToAsync(i))">@c</span>
+                        if (i - tokenStart >= source.Text.Length)
+                        {
+                            try
+                            {
+                                source.Poll();
+                                tokenStart = source.Offset;
+                            } catch (Exception) { }
+                        }
+
+                        <span class="ch_@(source.Next)" @onclick="@(async () => await MoveCursorToAsync(i))">@c</span>
                     }
                 </text>;
 
@@ -19,11 +34,13 @@
                 @<text>
                     <div class="cursor-content @(CursorMenuShown ? "d-block" : "d-none")">
                         
-                        @* PLACEHOLDER "AUTO-COMPLETE" ITEMS *@
-                        @foreach (var item in RawContent.Split(" "))
-                        {
-                            <div>@item</div>
-                        }
+                        <h3>@source.Next</h3>
+                        <hr />
+                        <h4>@source.Text</h4>
+
+                        <p>
+                        <pre><c>@compiled</c></pre>
+                        </p>
 
                     </div>
                 </text>;
@@ -64,6 +81,10 @@
     private readonly Guid guid = Guid.NewGuid();
     private IJSObjectReference? script;
     private ElementReference? editorPane;
+    private List<TokenMatch> tokens = new();
+    private int lastHash;
+    private string compiled = "";
+    private Semaphore mutex = new(1, 1);
 
     override protected async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -74,6 +95,29 @@
         {
             await script.InvokeVoidAsync("bindEditorEvents", DotNetObjectReference.Create(this), editorPane);
         }
+
+        var newHash = RawContent.GetHashCode();
+        var same = newHash == lastHash;
+        lastHash = newHash;
+        if (!firstRender && same)
+        {
+            return;
+        }
+        _ = Task.Run(() =>
+        {
+            mutex.WaitOne();
+            try
+            {
+                TokenStream source = RawContent;
+                var valid = new Statements(null).TryMatch(source, out var dto);
+                tokens = source.SourceMap;
+                compiled = $"Valid: {valid}; {JsonConvert.SerializeObject(dto, Formatting.Indented)}";
+                _ = InvokeAsync(StateHasChanged);
+            } finally
+            {
+                mutex.Release();
+            }
+        });
     }
 
     [JSInvokable]

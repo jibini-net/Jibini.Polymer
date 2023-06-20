@@ -1,6 +1,19 @@
 ﻿namespace Jibini.Polymer.Prototype.Lexer;
 
 /// <summary>
+/// Substring of input source mapped to a non-terminal and DTO. Can be used in
+/// combination with the original source to find the matched substring.
+/// </summary>
+public class TokenMatch
+{
+    public Token Token { get; set; }
+    public int Index { get; set; }
+    public int Length { get; set; }
+    public object? AstNode { get; set; }
+    public object? AstDto { get; set; }
+}
+
+/// <summary>
 /// Scans an in-memory text buffer for token matches, matching one token at a
 /// time as enums.
 /// </summary>
@@ -38,6 +51,8 @@ public class TokenStream
 
     // Stores the last peeked token to only peek once
     private Token? token;
+    // Previous tokens, allowing source to be mapped to the AST
+    public List<TokenMatch> SourceMap { get; set; } = new();
 
     private string? _Text;
     /// <summary>
