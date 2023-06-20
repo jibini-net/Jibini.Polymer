@@ -1,5 +1,4 @@
-﻿using Jibini.Polymer.Prototype.Grammar;
-using Jibini.Polymer.Prototype.Lexer;
+﻿using Jibini.Polymer.Prototype.Lexer;
 
 namespace Jibini.Polymer.Prototype.Parser;
 

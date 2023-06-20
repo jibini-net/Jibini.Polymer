@@ -52,5 +52,8 @@ public enum Token
     [Pattern(Regex = "var")]
     Var,
     [Pattern(Regex = "[A-Za-z_][A-Za-z0-9_]*")]
-    Ident
+    Ident,
+
+    [Pattern(Regex = ".")]
+    Unknown
 }

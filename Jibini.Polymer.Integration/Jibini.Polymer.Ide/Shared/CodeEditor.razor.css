@@ -1,7 +1,8 @@
 ﻿::deep {
     --code-editor-bg: rgba(0, 0, 0, 0.9);
     --code-editor-focus-bg: rgba(0, 0, 0, 0.85);
-    --code-editor-fg: white;
+    /*--code-editor-fg: white;*/
+    --code-editor-fg: #cd9999;
     --code-editor-popup-bg: #383838;
     --code-editor-blink-speed: 1s;
     --code-editor-radius: 0.3rem;
@@ -89,12 +90,18 @@
             margin-left: -0.25rem;
         }
 
-.ch_Ident
-{
-    color: #aea9fd;
+.ch_Ident {
+    color: #e7fdf6;
 }
 
-.ch_Fun, .ch_Var
-{
-    color: #1a6789
+.ch_Fun, .ch_Var {
+    color: #7fc8e5
+}
+
+.ch_LCurly, .ch_RCurly {
+    color: #eb67bc;
+}
+
+.ch_Discard {
+    color: #837c7c;
 }

@@ -61,6 +61,11 @@ public class TokenStream
     /// </summary>
     public string Text { get { _ = Next; return _Text!; } }
 
+    /// <summary>
+    /// Whether or not to skip over discarded tokens, or to present them.
+    /// </summary>
+    public bool SkipDiscard { get; set; } = true;
+
     public TokenStream(string source)
     {
         this.source = source;
@@ -114,7 +119,7 @@ public class TokenStream
                 return null;
             }
             _Peek();
-            if (token == Token.Discard)
+            if (SkipDiscard && token == Token.Discard)
             {
                 // Discard whitespace and make recursive call
                 Poll();

@@ -5,41 +5,49 @@
 
 <KeepWithin>
     <div class="code-editor" @ref="@editorPane"
-        tabindex="1" contenteditable="true">
+        tabindex="1" contenteditable="true" spellcheck="false">
 
         @{
             TokenStream source = RawContent;
+            source.SkipDiscard = false;
             var cIndex = 0;
             var tokenStart = 0;
+
+            Token? n = null;
+            string? t = null;
 
             Func<string, RenderFragment> stringContent = (s) =>
                 @<text>
                     @foreach (var c in s)
                     {
                         var i = cIndex++;
-                        if (i - tokenStart >= source.Text.Length)
+                        try
                         {
-                            try
+                            if (i - tokenStart >= source.Text.Length)
                             {
                                 source.Poll();
                                 tokenStart = source.Offset;
-                            } catch (Exception) { }
-                        }
+                            }
+                            if (i == CursorPosition)
+                            {
+                                n = source.Next;
+                                t = source.Text;
+                            }
+                        } catch (Exception) { }
 
                         <span class="ch_@(source.Next)" @onclick="@(async () => await MoveCursorToAsync(i))">@c</span>
                     }
                 </text>;
 
-            RenderFragment dropdownContent =
+            RenderFragment dropdownContent = 
                 @<text>
                     <div class="cursor-content @(CursorMenuShown ? "d-block" : "d-none")">
                         
-                        <h3>@source.Next</h3>
+                        <h3>@n</h3>
+                        <h4>@t</h4>
                         <hr />
-                        <h4>@source.Text</h4>
-
                         <p>
-                        <pre><c>@compiled</c></pre>
+                            <pre><c>@compiled</c></pre>
                         </p>
 
                     </div>
@@ -47,13 +55,13 @@
         }
 
         <pre>
-            @(stringContent(RawContent.Substring(0, CursorPosition))
+            @(stringContent(RawContent.Substring(0, Math.Min(RawContent.Length, CursorPosition)))
             
             )<div class="cursor" contenteditable="false">
                 <KeepIn>@dropdownContent</KeepIn>
             </div>@(
 
-            stringContent(RawContent.Substring(CursorPosition)))
+            stringContent(RawContent.Substring(Math.Min(RawContent.Length, CursorPosition))))
         </pre>
 
     </div>
