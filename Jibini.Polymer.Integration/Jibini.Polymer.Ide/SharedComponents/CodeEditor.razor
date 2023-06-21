@@ -1,0 +1,244 @@
+﻿@using Jibini.Polymer.Prototype.Grammar
+@using Jibini.Polymer.Prototype.Lexer
+@using Newtonsoft.Json
+@inject IJSRuntime js
+
+<KeepWithin>
+    <div class="code-editor" @ref="@editorPane"
+        tabindex="1" contenteditable="true" spellcheck="false">
+
+        @{
+            TokenStream source = RawContent;
+            source.SkipDiscard = false;
+            var cIndex = 0;
+            var tokenStart = 0;
+
+            Token? n = null;
+            string? t = null;
+
+            Func<string, RenderFragment> stringContent = (s) =>
+                @<text>
+                    @foreach (var c in s)
+                    {
+                        var i = cIndex++;
+                        try
+                        {
+                            if (i - tokenStart >= source.Text.Length)
+                            {
+                                source.Poll();
+                                tokenStart = source.Offset;
+                            }
+                            if (i == CursorPosition)
+                            {
+                                n = source.Next;
+                                t = source.Text;
+                            }
+                        } catch (Exception) { }
+
+                        <span data-i="@tokenStart" class="ch_@(source.Next)" @onclick="@(async () => await MoveCursorToAsync(i))">@c</span>
+                    }
+                </text>;
+
+            RenderFragment dropdownContent = 
+                @<text>
+                    <div class="cursor-content @(CursorMenuShown ? "d-block" : "d-none")">
+                        
+                        <h3>@n</h3>
+                        <h4>@t</h4>
+                        <hr />
+                        <p>
+                            <pre><c>@compiled</c></pre>
+                        </p>
+
+                    </div>
+                </text>;
+        }
+
+        <pre>
+            @(stringContent(RawContent.Substring(0, Math.Min(RawContent.Length, CursorPosition)))
+            
+            )<div class="cursor" contenteditable="false">
+                <KeepIn>@dropdownContent</KeepIn>
+            </div>@(
+
+            stringContent(RawContent.Substring(Math.Min(RawContent.Length, CursorPosition))))
+        </pre>
+
+    </div>
+</KeepWithin>
+
+@code {
+    [Parameter]
+    public string RawContent { get; set; } = "";
+
+    [Parameter]
+    public EventCallback<string> RawContentChanged { get; set; }
+
+    [Parameter]
+    public int CursorPosition { get; set; }
+
+    [Parameter]
+    public EventCallback<int> CursorPositionChanged { get; set; }
+
+    [Parameter]
+    public bool CursorMenuShown { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> CursorMenuShownChanged { get; set; }
+
+    private readonly Guid guid = Guid.NewGuid();
+    private IJSObjectReference? script;
+    private ElementReference? editorPane;
+
+    private string compiled = "";
+    private List<TokenMatch> tokens = new();
+    private int lastHash;
+    private Semaphore mutex = new(1, 1);
+    private Semaphore waitMutex = new(0, 1);
+
+    override protected async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        script ??= await js.ImportAsync("CodeEditor.razor.js");
+        if (firstRender)
+        {
+            await script.InvokeVoidAsync("bindEditorEvents", DotNetObjectReference.Create(this), editorPane);
+        }
+
+        var newHash = RawContent.GetHashCode();
+        var same = newHash == lastHash;
+        lastHash = newHash;
+
+        if (!firstRender && same)
+        {
+            return;
+        }
+        _ = Task.Run(() =>
+        {
+            var isSingleWaiter = false;
+            if (!mutex.WaitOne(0))
+            {
+                isSingleWaiter = waitMutex.WaitOne(0);
+                if (!isSingleWaiter)
+                {
+                    return;
+                }
+                mutex.WaitOne();
+            }
+            try
+            {
+                TokenStream source = RawContent;
+                var valid = new Statements(null).TryMatch(source, out var dto);
+                tokens = source.SourceMap;
+                compiled = $"Valid: {valid}; {JsonConvert.SerializeObject(dto, Formatting.Indented)}";
+
+                Console.WriteLine("Compiled");
+                _ = InvokeAsync(StateHasChanged);
+            } finally
+            {
+                if (isSingleWaiter)
+                {
+                    waitMutex.Release();
+                }
+                mutex.Release();
+            }
+        });
+    }
+
+    [JSInvokable]
+    public async Task EnterContentAsync(string content)
+    {
+        var oldContentLength = RawContent.Length;
+
+        RawContent = RawContent.Insert(CursorPosition, content);
+        await RawContentChanged.InvokeAsync(RawContent);
+
+        CursorPosition += RawContent.Length - oldContentLength;
+        await CursorPositionChanged.InvokeAsync(CursorPosition);
+
+        StateHasChanged();
+    }
+
+    [JSInvokable]
+    public async Task OnKeyPressedAsync(string key)
+    {
+        var oldContentLength = RawContent.Length;
+        switch (key)
+        {
+            case "Alt":
+            case "CapsLock":
+            // Control is filtered in JS module
+            case "Control":
+            case "Delete":
+            case "End":
+            case "F1":
+            case "F2":
+            case "F3":
+            case "F4":
+            case "F5":
+            case "F6":
+            case "F7":
+            case "F8":
+            case "F9":
+            case "F10":
+            case "F11":
+            case "F12":
+            case "Home":
+            case "Insert":
+            case "Meta":
+            case "NumLock":
+            case "PageDown":
+            case "PageUp":
+            case "Pause":
+            case "Shift":
+                break;
+
+            case "Backspace":
+                if (CursorPosition > 0)
+                {
+                    RawContent = RawContent.Remove(CursorPosition - 1, 1);
+                }
+                break;
+            case "Enter":
+                RawContent = RawContent.Insert(CursorPosition, "\n");
+                break;
+            case "Escape":
+                CursorMenuShown = false;
+                await CursorMenuShownChanged.InvokeAsync(CursorMenuShown);
+                break;
+            case "Tab":
+                RawContent = RawContent.Insert(CursorPosition, "    ");
+                break;
+
+            case "ArrowLeft":
+                CursorPosition = Math.Max(0, CursorPosition - 1);
+                break;
+            case "ArrowUp":
+                break;
+            case "ArrowRight":
+                CursorPosition = Math.Min(RawContent.Length, CursorPosition + 1);
+                break;
+            case "ArrowDown":
+                break;
+
+            default:
+                RawContent = RawContent.Insert(CursorPosition, key);
+                CursorMenuShown = true;
+                await CursorMenuShownChanged.InvokeAsync(CursorMenuShown);
+                break;
+        }
+        await RawContentChanged.InvokeAsync(RawContent);
+
+        CursorPosition += RawContent.Length - oldContentLength;
+        await CursorPositionChanged.InvokeAsync(CursorPosition);
+
+        StateHasChanged();
+    }
+
+    private async Task MoveCursorToAsync(int charIndex)
+    {
+        CursorPosition = charIndex;
+        await CursorPositionChanged.InvokeAsync(CursorPosition);
+    }
+}

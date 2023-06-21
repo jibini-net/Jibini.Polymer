@@ -1,0 +1,31 @@
+﻿@inject IJSRuntime js
+
+<div @ref="@element" class="keep-in @Class" style="display: block;@Style">@ChildContent</div>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public string Class { get; set; } = "";
+
+    [Parameter]
+    public string Style { get; set; } = "";
+
+    private ElementReference? element;
+
+    private IJSObjectReference? script;
+    private IJSObjectReference? reevalBounds;
+
+    override protected async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        // Load script and update function on first call
+        script ??= await js.InvokeAsync<IJSObjectReference>("import", "./_content/Jibini.Polymer.Ide.SharedComponents/KeepIn.razor.js");
+        reevalBounds ??= await script.InvokeAsync<IJSObjectReference>("bindKeepIns", element);
+        
+        // Invoke function which checks objects are in bounds
+        await reevalBounds.InvokeVoidAsync("invoke");
+    }
+}

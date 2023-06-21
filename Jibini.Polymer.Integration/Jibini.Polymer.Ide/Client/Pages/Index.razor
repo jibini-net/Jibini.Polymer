@@ -1,0 +1,45 @@
+﻿@page "/"
+<PageTitle>Code Editor</PageTitle>
+
+<div class="d-flex flex-row" style="width: 100%;height: 100%;">
+    <div style="width: 50%;">
+
+        <CodeEditor @bind-RawContent="@contentA" />
+    </div>
+    <div style="width: 50%;">
+
+        <CodeEditor @bind-RawContent="@contentB" />
+    </div>
+</div>
+
+@code {
+    string contentA = @"
+var zero: int;
+
+fun Main(args: Array<string>): int
+{
+    /* No literals yet, but this may remain a valid return syntax: */
+    return = zero;
+
+    /* If no other return is specified, the set value is kept. */
+}
+    ".Trim();
+
+    string contentB = @"
+var container: Container<dynamic> = new;
+var zero: int;
+var globalCount = zero;
+
+fun DoWork(b: int)
+{
+    var i: int;
+    fun changeValue(): int
+    {
+        i = globalCount + b;
+        return = i;
+    }
+    container.Value = changeValue;
+    container.Value();
+}
+    ".Trim();
+}

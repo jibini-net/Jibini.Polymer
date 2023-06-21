@@ -5,7 +5,13 @@ VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jibini.Polymer.Prototype", "Jibini.Polymer.Prototype\Jibini.Polymer.Prototype.csproj", "{11D1F244-C127-4CDA-A049-0A9A61517D06}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jibini.Polymer.Ide", "Jibini.Polymer.Integration\Jibini.Polymer.Ide\Jibini.Polymer.Ide.csproj", "{40A786C6-1775-4DC3-B3A4-D3E8E0A9204E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jibini.Polymer.Ide.Shared", "Jibini.Polymer.Integration\Jibini.Polymer.Ide\Shared\Jibini.Polymer.Ide.Shared.csproj", "{52DF9398-21F7-42DE-BC4F-0DE131150FA6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jibini.Polymer.Ide.SharedComponents", "Jibini.Polymer.Integration\Jibini.Polymer.Ide\SharedComponents\Jibini.Polymer.Ide.SharedComponents.csproj", "{1CCEAA39-3F0A-4BF6-864D-086CABF0AD01}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jibini.Polymer.Ide.Client", "Jibini.Polymer.Integration\Jibini.Polymer.Ide\Client\Jibini.Polymer.Ide.Client.csproj", "{6C23D05C-4149-46F0-967A-DF9410B45B33}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jibini.Polymer.Ide.Server", "Jibini.Polymer.Integration\Jibini.Polymer.Ide\Server\Jibini.Polymer.Ide.Server.csproj", "{7441CE61-86E5-4949-83BB-E070B9C84733}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +23,22 @@ Global
 		{11D1F244-C127-4CDA-A049-0A9A61517D06}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11D1F244-C127-4CDA-A049-0A9A61517D06}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11D1F244-C127-4CDA-A049-0A9A61517D06}.Release|Any CPU.Build.0 = Release|Any CPU
-		{40A786C6-1775-4DC3-B3A4-D3E8E0A9204E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{40A786C6-1775-4DC3-B3A4-D3E8E0A9204E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{40A786C6-1775-4DC3-B3A4-D3E8E0A9204E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{40A786C6-1775-4DC3-B3A4-D3E8E0A9204E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52DF9398-21F7-42DE-BC4F-0DE131150FA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52DF9398-21F7-42DE-BC4F-0DE131150FA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52DF9398-21F7-42DE-BC4F-0DE131150FA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52DF9398-21F7-42DE-BC4F-0DE131150FA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CCEAA39-3F0A-4BF6-864D-086CABF0AD01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CCEAA39-3F0A-4BF6-864D-086CABF0AD01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CCEAA39-3F0A-4BF6-864D-086CABF0AD01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CCEAA39-3F0A-4BF6-864D-086CABF0AD01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C23D05C-4149-46F0-967A-DF9410B45B33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C23D05C-4149-46F0-967A-DF9410B45B33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C23D05C-4149-46F0-967A-DF9410B45B33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C23D05C-4149-46F0-967A-DF9410B45B33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7441CE61-86E5-4949-83BB-E070B9C84733}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7441CE61-86E5-4949-83BB-E070B9C84733}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7441CE61-86E5-4949-83BB-E070B9C84733}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7441CE61-86E5-4949-83BB-E070B9C84733}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
