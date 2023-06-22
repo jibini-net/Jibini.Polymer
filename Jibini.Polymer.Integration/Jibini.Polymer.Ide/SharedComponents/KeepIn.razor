@@ -21,11 +21,16 @@
     {
         await base.OnAfterRenderAsync(firstRender);
 
-        // Load script and update function on first call
-        script ??= await js.InvokeAsync<IJSObjectReference>("import", "./_content/Jibini.Polymer.Ide.SharedComponents/KeepIn.razor.js");
-        reevalBounds ??= await script.InvokeAsync<IJSObjectReference>("bindKeepIns", element);
-        
-        // Invoke function which checks objects are in bounds
-        await reevalBounds.InvokeVoidAsync("invoke");
+        try
+        {
+            // Load script and update function on first call
+            script ??= await js.InvokeAsync<IJSObjectReference>("import", "./_content/Jibini.Polymer.Ide.SharedComponents/KeepIn.razor.js");
+            reevalBounds ??= await script.InvokeAsync<IJSObjectReference>("bindKeepIns", element);
+
+            // Invoke function which checks objects are in bounds
+            await reevalBounds.InvokeVoidAsync("invoke");
+        } catch (JSException)
+        {
+        }
     }
 }

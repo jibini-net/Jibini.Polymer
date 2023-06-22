@@ -5,7 +5,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project>
   <PropertyGroup>
     <_PublishTargetUrl>C:\Users\zgoethel\Desktop\Source\Jibini.Polymer\Jibini.Polymer.Integration\Jibini.Polymer.Ide\Server\bin\Release\net7.0\publish\</_PublishTargetUrl>
-    <History>True|2023-06-21T01:45:16.8200151Z;</History>
+    <History>True|2023-06-22T04:50:09.4743639Z;True|2023-06-21T23:40:49.9847386-05:00;True|2023-06-21T23:37:53.0868446-05:00;True|2023-06-21T23:34:08.3644891-05:00;True|2023-06-21T23:32:47.8086018-05:00;True|2023-06-21T22:19:13.4483185-05:00;True|2023-06-20T20:45:16.8200151-05:00;</History>
     <LastFailureDetails />
   </PropertyGroup>
 </Project>
