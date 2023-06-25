@@ -1,7 +1,15 @@
-﻿namespace Jibini.Polymer.Ide
+﻿using System.ComponentModel;
+
+namespace Jibini.Polymer.Ide
 {
     partial class EditorPane
     {
+        [Browsable(true)]
+        [Category("Action")]
+        [Description("Invoked when text content changes")]
+        public event EventHandler SourceChanged;
+
+
         /// <summary> 
         /// Required designer variable.
         /// </summary>

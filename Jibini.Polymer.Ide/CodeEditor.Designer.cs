@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             editorPane = new EditorPane();
+            jsonOutput = new TextBox();
             SuspendLayout();
             // 
             // editorPane
@@ -38,23 +39,39 @@
             editorPane.Location = new Point(0, 0);
             editorPane.Margin = new Padding(0);
             editorPane.Name = "editorPane";
-            editorPane.Size = new Size(800, 450);
+            editorPane.Size = new Size(532, 450);
             editorPane.TabIndex = 1;
+            editorPane.SourceChanged += editorPane_SourceChanged;
+            // 
+            // jsonOutput
+            // 
+            jsonOutput.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            jsonOutput.Font = new Font("Courier New", 9F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            jsonOutput.Location = new Point(532, 0);
+            jsonOutput.Margin = new Padding(0);
+            jsonOutput.Multiline = true;
+            jsonOutput.Name = "jsonOutput";
+            jsonOutput.ScrollBars = ScrollBars.Both;
+            jsonOutput.Size = new Size(270, 450);
+            jsonOutput.TabIndex = 2;
             // 
             // CodeEditor
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(jsonOutput);
             Controls.Add(editorPane);
             Name = "CodeEditor";
             Text = "Code Editor";
             Load += form_Load;
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
         private EditorPane editorPane;
+        private TextBox jsonOutput;
     }
 }

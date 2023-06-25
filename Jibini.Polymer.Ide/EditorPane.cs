@@ -25,6 +25,7 @@ public partial class EditorPane : UserControl
         if (richText.Text != prevText)
         {
             _TriggerHighlight();
+            SourceChanged.Invoke(this, EventArgs.Empty);
             prevText = richText.Text;
         }
     }
