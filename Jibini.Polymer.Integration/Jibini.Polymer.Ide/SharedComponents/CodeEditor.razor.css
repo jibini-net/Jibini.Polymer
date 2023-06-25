@@ -1,6 +1,7 @@
 ﻿::deep {
     --code-editor-bg: rgba(0, 0, 0, 0.9);
-    --code-editor-focus-bg: rgba(0, 0, 0, 0.85);
+    /*--code-editor-focus-bg: rgba(0, 0, 0, 0.85);*/
+    --code-editor-focus-bg: var(--code-editor-bg);
     /*--code-editor-fg: white;*/
     --code-editor-fg: #ed7b7b;
     --code-editor-popup-bg: #383838;
@@ -27,6 +28,10 @@
 
     .code-editor:focus {
         background: var(--code-editor-focus-bg);
+    }
+
+    .code-editor .tok:focus {
+        border: 1px solid white;
     }
 
     @keyframes cursor-blink {
@@ -93,7 +98,6 @@
 
 .ch_Ident {
     color: #e7fdf6;
-    font-weight: 800;
 }
 
 .ch_Fun, .ch_Var {

@@ -1,7 +1,6 @@
 ﻿@using Jibini.Polymer.Prototype.Grammar
 @using Jibini.Polymer.Prototype.Lexer
 @using Newtonsoft.Json
-@using System.Runtime.CompilerServices
 @inject IJSRuntime js
 
 <KeepWithin>
@@ -39,26 +38,10 @@
     private int lastHash;
     private string compiled = "";
 
-    private async IAsyncEnumerable<(int, string, Token)> _ParseContentAsync([EnumeratorCancellation] CancellationToken cancel)
+    private async Task<RenderFragment> _DrawCodeAsync(CancellationToken cancel)
     {
         TokenStream source = RawContent;
         source.SkipDiscard = false;
-
-        for (;
-            // Broken into tasks to avoid freezing UI
-            await Task.Run(() => source.Next) is not null;
-            source.Poll())
-        {
-            if (cancel.IsCancellationRequested)
-            {
-                yield break;
-            }
-            yield return (source.Offset, source.Text, source.Next!.Value);
-        }
-    }
-
-    private async Task<RenderFragment> _DrawCodeAsync(CancellationToken cancel)
-    {
         var fragments = new List<RenderFragment>();
 
         Token? s = null;
@@ -76,19 +59,19 @@
 
             </div>;
 
-        await foreach (var (i, text, token) in _ParseContentAsync(cancel))
+        await foreach (var (i, text, token) in source.TokenizeAsync(cancel))
         {
-            fragments.Add(
-                @<pre class="tok ch_@token" @onclick="@(async () => await MoveCursorToAsync(i))">@text</pre>
-                );
-            if (i < CursorPosition && i + text.Length >= CursorPosition)
+            if (i <= CursorPosition && i + text.Length > CursorPosition)
             {
                 s = token;
                 t = text;
                 fragments.Add(
-                    @<span class="cursor" contenteditable="false"><KeepIn>@cursorContent</KeepIn></span>
+                    @<span class="cursor" style="margin-left: @(0.687m * (CursorPosition - i))rem" contenteditable="false"><KeepIn>@cursorContent</KeepIn></span>
                     );
             }
+            fragments.Add(
+                @<pre data-i="@i" class="tok ch_@token">@text</pre>
+                );
         }
         return @<text> @foreach (var f in fragments) { @f } </text>;
     }
@@ -240,7 +223,8 @@
         _TriggerDrawCode();
     }
 
-    private async Task MoveCursorToAsync(int charIndex)
+    [JSInvokable]
+    public async Task MoveCursorToAsync(int charIndex)
     {
         CursorPosition = charIndex;
         await CursorPositionChanged.InvokeAsync(CursorPosition);

@@ -13,6 +13,7 @@ function handlePaste(component, editorPane, e) {
     return false;
 }
 
+// https://stackoverflow.com/questions/3972014/get-contenteditable-caret-position
 function getCaretPosition(editableDiv) {
     var caretPos = 0, sel, range;
     if (window.getSelection) {
@@ -37,50 +38,22 @@ function getCaretPosition(editableDiv) {
     return caretPos;
 }
 
+function handleClick(component, editorPane, e) {
+    if (e.target == editorPane) {
+
+        console.log("Need to click end of line");
+
+    } else if ($(e.target).hasClass("tok")) {
+
+        var i = +`${$(e.target).attr("data-i")}`;
+        var moveTo = i + getCaretPosition(e.target);
+        component.invokeMethodAsync("MoveCursorToAsync", moveTo);
+
+    }
+}
+
 export function bindEditorEvents(component, editorPane) {
     $(editorPane).on("keydown", (e) => handleKeyDown(component, editorPane, e));
     $(editorPane).on("paste", (e) => handlePaste(component, editorPane, e));
-    $(editorPane).on("click", (e) => {
-        console.log(e);
-        console.log(getCaretPosition(e.target));
-    });
+    $(editorPane).on("click", (e) => handleClick(component, editorPane, e));
 }
-
-/*
-https://stackoverflow.com/questions/1391278/contenteditable-change-events
-
-$("body").on("focus", "[contenteditable]", function() {
-    $(this).data("before", $(this).html());
-}).on("blur keyup paste input", "[contenteditable]", function() {
-    if ($(this).data("before") !== $(this).html()) {
-        $(this).data("before", $(this).html());
-        $(this).trigger("change");
-    }
-});
-
-https://stackoverflow.com/questions/3972014/get-contenteditable-caret-position
-
-function getCaretPosition(editableDiv) {
-  var caretPos = 0, sel, range;
-  if (window.getSelection) {
-    sel = window.getSelection();
-    if (sel.rangeCount) {
-      range = sel.getRangeAt(0);
-      if (range.commonAncestorContainer.parentNode == editableDiv) {
-        caretPos = range.endOffset;
-      }
-    }
-  } else if (document.selection && document.selection.createRange) {
-    range = document.selection.createRange();
-    if (range.parentElement() == editableDiv) {
-      var tempEl = document.createElement("span");
-      editableDiv.insertBefore(tempEl, editableDiv.firstChild);
-      var tempRange = range.duplicate();
-      tempRange.moveToElementText(tempEl);
-      tempRange.setEndPoint("EndToEnd", range);
-      caretPos = tempRange.text.length;
-    }
-  }
-  return caretPos;
-}
-*/
