@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jibini.Polymer.Ide.Client",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jibini.Polymer.Ide.Server", "Jibini.Polymer.Integration\Jibini.Polymer.Ide\Server\Jibini.Polymer.Ide.Server.csproj", "{7441CE61-86E5-4949-83BB-E070B9C84733}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jibini.Polymer.Ide", "Jibini.Polymer.Ide\Jibini.Polymer.Ide.csproj", "{2EB2B7FF-C803-4D33-A684-3C5A2C64BB8B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jibini.Polymer.AstExaminer", "Jibini.Polymer.Integration\Jibini.Polymer.AstExaminer\Jibini.Polymer.AstExaminer.csproj", "{2EB2B7FF-C803-4D33-A684-3C5A2C64BB8B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

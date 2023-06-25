@@ -1,4 +1,4 @@
-namespace Jibini.Polymer.Ide
+namespace Jibini.Polymer.AstExaminer
 {
     internal static class Program
     {
@@ -11,7 +11,7 @@ namespace Jibini.Polymer.Ide
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new CodeEditor());
+            Application.Run(new AstExaminer());
         }
     }
 }

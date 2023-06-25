@@ -1,7 +1,7 @@
 ﻿using Jibini.Polymer.Prototype.Lexer;
 using System.Runtime.InteropServices;
 
-namespace Jibini.Polymer.Ide;
+namespace Jibini.Polymer.AstExaminer;
 
 public partial class EditorPane : UserControl
 {
@@ -69,6 +69,7 @@ public partial class EditorPane : UserControl
 
         TokenStream source = richText.Text;
         source.SkipDiscard = false;
+
         Task.Run(async () =>
         {
             try

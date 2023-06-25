@@ -1,11 +1,11 @@
 using Jibini.Polymer.Prototype.Grammar;
 using Newtonsoft.Json;
 
-namespace Jibini.Polymer.Ide
+namespace Jibini.Polymer.AstExaminer
 {
-    public partial class CodeEditor : Form
+    public partial class AstExaminer : Form
     {
-        public CodeEditor()
+        public AstExaminer()
         {
             InitializeComponent();
         }

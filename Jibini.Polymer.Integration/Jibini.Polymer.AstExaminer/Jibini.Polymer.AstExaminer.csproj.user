@@ -4,7 +4,7 @@
     <Compile Update="EditorPane.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="CodeEditor.cs">
+    <Compile Update="AstExaminer.cs">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>

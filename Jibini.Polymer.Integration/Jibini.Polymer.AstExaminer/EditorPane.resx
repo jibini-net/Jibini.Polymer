@@ -57,32 +57,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="richText.Text" xml:space="preserve">
-    <value>var zero: int;
-
-fun Main(args: Array&lt;string&gt;): int
-{
-    /* No literals yet, but this may remain a valid return syntax: */
-    return = zero;
-
-    /* If no other return is specified, the set value is kept. */
-    DoWork(return);
-}
-
-var container: Container&lt;dynamic&gt; = new;
-var zero: int;
-var globalCount = zero;
-
-fun DoWork(b: int)
-{
-    var i: int;
-    fun changeValue(): int
-    {
-        i = globalCount + b;
-        return = i;
-    }
-    container.Value = changeValue;
-    container.Value();
-}</value>
-  </data>
 </root>

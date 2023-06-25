@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Jibini.Polymer.Ide
+namespace Jibini.Polymer.AstExaminer
 {
     partial class EditorPane
     {
@@ -36,7 +36,6 @@ namespace Jibini.Polymer.Ide
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EditorPane));
             richText = new RichTextBox();
             SuspendLayout();
             // 
@@ -55,9 +54,8 @@ namespace Jibini.Polymer.Ide
             richText.Name = "richText";
             richText.Size = new Size(150, 150);
             richText.TabIndex = 3;
-            richText.Text = resources.GetString("richText.Text");
+            richText.Text = "fun Main(args: Array<string>): int\n{\n}";
             richText.WordWrap = false;
-            richText.ZoomFactor = 1.2F;
             richText.TextChanged += richText_TextChanged;
             // 
             // EditorPane
