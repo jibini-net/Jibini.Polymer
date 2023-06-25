@@ -1,4 +1,6 @@
-﻿namespace Jibini.Polymer.Prototype.Lexer;
+﻿using System.Runtime.CompilerServices;
+
+namespace Jibini.Polymer.Prototype.Lexer;
 
 /// <summary>
 /// Substring of input source mapped to a non-terminal and DTO. Can be used in
@@ -141,5 +143,17 @@ public class TokenStream
         Offset += Text.Length;
         token = null;
         return result ?? throw new Exception("Polled end of file");
+    }
+
+    public async IAsyncEnumerable<(int, string, Token)> TokenizeAsync([EnumeratorCancellation] CancellationToken cancel)
+    {
+        for (; await Task.Run(() => Next) is not null; Poll())
+        {
+            if (cancel.IsCancellationRequested)
+            {
+                yield break;
+            }
+            yield return (Offset, Text, Next!.Value);
+        }
     }
 }
