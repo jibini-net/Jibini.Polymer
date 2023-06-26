@@ -7,7 +7,33 @@
     <div class="code-editor" @ref="@editorPane"
         tabindex="1" contenteditable="true" spellcheck="false">
 
-        @parsedCode
+        @{
+            Token? s = null;
+            string? t = null;
+
+            RenderFragment cursorContent =
+                @<div class="cursor-content @(CursorMenuShown ? "d-block" : "d-none")">
+
+                    <h3>@s</h3>
+                    <h4>@t</h4>
+                    <hr />
+                    <p>
+                        <pre><c>@compiled</c></pre>
+                    </p>
+
+                </div>;
+
+            foreach (var (i, text, token) in tokens)
+            {
+                if (i <= CursorPosition && i + text.Length > CursorPosition)
+                {
+                    s = token;
+                    t = text;
+                    <span class="cursor" style="margin-left: @(0.687m * (CursorPosition - i))rem" contenteditable="false"><KeepIn>@cursorContent</KeepIn></span>
+                }
+                <pre data-i="@i" class="tok ch_@token">@text</pre>
+            }
+        }
 
     </div>
 </KeepWithin>
@@ -31,53 +57,33 @@
     [Parameter]
     public EventCallback<bool> CursorMenuShownChanged { get; set; }
 
-    private RenderFragment? parsedCode;
     private CancellationTokenSource? parseCancel;
     private IJSObjectReference? script;
     private ElementReference? editorPane;
     private int lastHash;
     private string compiled = "";
-
-    private async Task<RenderFragment> _DrawCodeAsync(CancellationToken cancel)
+    private List<(int, string, Token)> tokens = new();
+    
+    private async Task _TokenizeCodeAsync(CancellationToken cancel)
     {
         TokenStream source = RawContent;
         source.SkipDiscard = false;
-        var fragments = new List<RenderFragment>();
-
-        Token? s = null;
-        string? t = null;
-
-        RenderFragment cursorContent =
-            @<div class="cursor-content @(CursorMenuShown ? "d-block" : "d-none")">
-
-                <h3>@s</h3>
-                <h4>@t</h4>
-                <hr />
-                <p>
-                    <pre><c>@compiled</c></pre>
-                </p>
-
-            </div>;
-
-        await foreach (var (i, text, token) in source.TokenizeAsync(cancel))
+        var result = new List<(int, string, Token)>();
+        await foreach (var tok in source.TokenizeAsync(cancel))
         {
-            if (i <= CursorPosition && i + text.Length > CursorPosition)
-            {
-                s = token;
-                t = text;
-                fragments.Add(
-                    @<span class="cursor" style="margin-left: @(0.687m * (CursorPosition - i))rem" contenteditable="false"><KeepIn>@cursorContent</KeepIn></span>
-                    );
-            }
-            fragments.Add(
-                @<pre data-i="@i" class="tok ch_@token">@text</pre>
-                );
+            result.Add(tok);
         }
-        return @<text> @foreach (var f in fragments) { @f } </text>;
+
+        if (cancel.IsCancellationRequested)
+        {
+            return;
+        }
+        tokens = result;
     }
 
     private void _TriggerDrawCode()
     {
+        _ = InvokeAsync(StateHasChanged);
         try
         {
             parseCancel?.Cancel();
@@ -85,28 +91,31 @@
         } catch (Exception)
         {
         }
+        var cancel = (parseCancel = new());
 
         var detach = async () =>
         {
-            var p = (parseCancel = new());
-            var result = await _DrawCodeAsync(p.Token);
+            try
+            {
+                await Task.Delay(500, cancel.Token);
 
-            if (p.IsCancellationRequested)
+                await _TokenizeCodeAsync(cancel.Token);
+                _ = InvokeAsync(StateHasChanged);
+            } catch (Exception)
             {
                 return;
             }
-            parsedCode = result;
-            _ = InvokeAsync(StateHasChanged);
 
             try
             {
-                await Task.Delay(1500, cancellationToken: p.Token);
-                
+                await Task.Delay(1000, cancellationToken: cancel.Token);
+
                 var success = new Statements(null).TryMatch(RawContent, out var dto);
                 compiled = $"Valid: {success}; {JsonConvert.SerializeObject(dto, Formatting.Indented)}";
                 _ = InvokeAsync(StateHasChanged);
             } catch (Exception)
             {
+                return;
             }
         };
         _ = detach.Invoke();
