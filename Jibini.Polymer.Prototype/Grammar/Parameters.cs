@@ -7,7 +7,7 @@ using static Token;
 
 public class ParameterDto
 {
-    public string Name { get; set; } = "";
+    public IdentDto Name { get; set; } = new();
     public TypeDto Type { get; set; } = new();
 }
 
@@ -15,9 +15,9 @@ public class Parameters : NonTerminal<List<ParameterDto>>
 {
     override public bool TryMatch(TokenStream source, out List<ParameterDto>? dto)
     {
+        dto = new();
         _ = MatchSeries(source, LParens);
 
-        dto = new();
         while (Valid && source.Next != RParens)
         {
             var data = MatchSeries(source,
@@ -25,7 +25,7 @@ public class Parameters : NonTerminal<List<ParameterDto>>
                 );
             dto.Add(new()
             {
-                Name = (data[0] as IdentDto)?.Name ?? "",
+                Name = (data[0] as IdentDto)!,
                 Type = (data[2] as TypeDto)!
             });
 

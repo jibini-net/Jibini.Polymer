@@ -9,7 +9,7 @@ public class FunctionDto : StatementDto
 {
     override public string _Type => "Function";
 
-    public string Name { get; set; } = "";
+    public IdentDto Name { get; set; } = new();
     public List<TypeDto>? TypeParams { get; set; }
     public List<ParameterDto> Parameters { get; set; } = new();
     public TypeDto? ReturnType { get; set; }
@@ -25,7 +25,7 @@ public class Function : NonTerminal<FunctionDto>
             );
         dto = new()
         {
-            Name = (data[1] as IdentDto)?.Name ?? ""
+            Name = (data[1] as IdentDto)!
         };
 
         if (source.Next == Lt)

@@ -9,11 +9,11 @@ public class Exponent : NonTerminal<ExprBiOpDto>
 {
     override public bool TryMatch(TokenStream source, out ExprBiOpDto? dto)
     {
-        _ = MatchSeries(source, Caret);
         dto = new()
         {
             Op = Caret.ToString()
         };
+        _ = MatchSeries(source, Caret);
 
         if (Valid)
         {

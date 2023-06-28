@@ -11,30 +11,44 @@ public enum Token
     [Pattern(Regex = "\\/\\*(\\*(?!\\/)|[^*])*\\*\\/")]
     Discard,
 
-    [Pattern(Regex = "\\{")]
-    LCurly,
-    [Pattern(Regex = "\\}")]
-    RCurly,
+    [Pattern(Regex = "fun(?=\\s|$)")]
+    Fun,
+    [Pattern(Regex = "var(?=\\s|$)")]
+    Var,
+    [Pattern(Regex = "if(?=\\s|$)")]
+    If,
+    [Pattern(Regex = "else(?=\\s|$)")]
+    Else,
+    [Pattern(Regex = "[A-Za-z_][A-Za-z0-9_]*")]
+    Ident,
+
+    [Pattern(Regex = "\\=\\>")]
+    Arrow,
+
+    [Pattern(Regex = "\\:")]
+    Colon,
     [Pattern(Regex = "\\(")]
     LParens,
     [Pattern(Regex = "\\)")]
     RParens,
+    [Pattern(Regex = "\\.")]
+    Dot,
+    [Pattern(Regex = "\\{")]
+    LCurly,
+    [Pattern(Regex = "\\}")]
+    RCurly,
     [Pattern(Regex = "\\<")]
     Lt,
     [Pattern(Regex = "\\>")]
     Gt,
     [Pattern(Regex = "\\,")]
     Comma,
-    [Pattern(Regex = "\\:")]
-    Colon,
     [Pattern(Regex = "\\;")]
     Semic,
     [Pattern(Regex = "\\=")]
     Equal,
     [Pattern(Regex = "\\^")]
     Caret,
-    [Pattern(Regex = "\\.")]
-    Dot,
     [Pattern(Regex = "\\*")]
     Mult,
     [Pattern(Regex = "\\/")]
@@ -47,12 +61,8 @@ public enum Token
     Mod,
     [Pattern(Regex = "\\!")]
     Not,
-    [Pattern(Regex = "fun")]
-    Fun,
-    [Pattern(Regex = "var")]
-    Var,
-    [Pattern(Regex = "[A-Za-z_][A-Za-z0-9_]*")]
-    Ident,
+    [Pattern(Regex = "\\?")]
+    Quest,
 
     [Pattern(Regex = ".")]
     Unknown
