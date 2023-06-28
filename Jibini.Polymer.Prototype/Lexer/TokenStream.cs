@@ -3,14 +3,14 @@
 namespace Jibini.Polymer.Prototype.Lexer;
 
 /// <summary>
-/// Substring of input source mapped to a non-terminal and DTO. Can be used in
-/// combination with the original source to find the matched substring.
+/// Substring of input source mapped to a non-terminal and DTO. A series of
+/// these effectively represents a tokenized code buffer.
 /// </summary>
 public class TokenMatch
 {
     public Token Token { get; set; }
     public int Index { get; set; }
-    public int Length { get; set; }
+    public string Text { get; set; } = "";
     public object? AstNode { get; set; }
     public object? AstDto { get; set; }
 }
@@ -145,7 +145,7 @@ public class TokenStream
         return result ?? throw new Exception("Polled end of file");
     }
 
-    public async IAsyncEnumerable<(int, string, Token)> TokenizeAsync([EnumeratorCancellation] CancellationToken cancel)
+    public async IAsyncEnumerable<TokenMatch> TokenizeAsync([EnumeratorCancellation] CancellationToken cancel)
     {
         for (; await Task.Run(() => Next) is not null; Poll())
         {
@@ -153,7 +153,12 @@ public class TokenStream
             {
                 yield break;
             }
-            yield return (Offset, Text, Next!.Value);
+            yield return new()
+            {
+                Index = Offset,
+                Text = Text,
+                Token = Next!.Value
+            };
         }
     }
 }

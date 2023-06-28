@@ -7,7 +7,7 @@ public partial class EditorPane : UserControl
 {
     private CancellationTokenSource? cancelTokenize;
     private string prevText = "";
-    private List<(int, string, Token)> tokens = new();
+    private List<TokenMatch> tokens = new();
 
     public EditorPane()
     {
@@ -51,14 +51,15 @@ public partial class EditorPane : UserControl
         var oldStart = richText.SelectionStart;
         var oldLength = richText.SelectionLength;
 
-        foreach (var (offset, text, next) in tokens)
+        foreach (var tok in tokens)
         {
-            _Highlight(offset, text, next);
+            _Highlight(tok.Index, tok.Text, tok.Token);
         }
 
         richText.Select(oldStart, oldLength);
         EndUpdate();
         richText.ResumeLayout();
+        richText.ClearUndo();
     }
 
     private void _TriggerHighlight()

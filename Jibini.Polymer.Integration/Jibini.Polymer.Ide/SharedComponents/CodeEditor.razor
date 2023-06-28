@@ -23,15 +23,16 @@
 
                 </div>;
 
-            foreach (var (i, text, token) in tokens)
+            foreach (var tok in tokens)
             {
-                if (i <= CursorPosition && i + text.Length > CursorPosition)
+                if (tok.Index <= CursorPosition && tok.Index + tok.Text.Length > CursorPosition)
                 {
-                    s = token;
-                    t = text;
-                    <span class="cursor" style="margin-left: @(0.687m * (CursorPosition - i))rem" contenteditable="false"><KeepIn>@cursorContent</KeepIn></span>
+                    s = tok.Token;
+                    t = tok.Text;
+                    <span class="cursor" style="margin-left: @(0.687m * (CursorPosition - tok.Index))rem" contenteditable="false"><KeepIn>@cursorContent</KeepIn></span>
                 }
-                <pre data-i="@i" class="tok ch_@token">@text</pre>
+                var i = tok.Index;
+                <pre data-i="@i" class="tok ch_@tok.Token">@tok.Text</pre>
             }
         }
 
@@ -62,13 +63,13 @@
     private ElementReference? editorPane;
     private int lastHash;
     private string compiled = "";
-    private List<(int, string, Token)> tokens = new();
+    private List<TokenMatch> tokens = new();
     
     private async Task _TokenizeCodeAsync(CancellationToken cancel)
     {
         TokenStream source = RawContent;
         source.SkipDiscard = false;
-        var result = new List<(int, string, Token)>();
+        var result = new List<TokenMatch>();
         await foreach (var tok in source.TokenizeAsync(cancel))
         {
             result.Add(tok);
@@ -142,6 +143,28 @@
         _TriggerDrawCode();
     }
 
+    private void _InsertIntoToken(string content)
+    {
+        var modifyToken = tokens.FindLastIndex((it) => it.Index <= CursorPosition);
+        if (modifyToken != -1)
+        {
+            var match = tokens[modifyToken];
+            var insertAt = CursorPosition - match.Index;
+            match.Text = match.Text.Insert(insertAt, content);
+
+            for (var i = modifyToken + 1; i < tokens.Count; i++)
+            {
+                tokens[i].Index += content.Length;
+            }
+        }
+    }
+
+    private async Task _GotoJsTokOffsetAsync(ElementReference? target, int tokenBase)
+    {
+        var charOffset = await script!.InvokeAsync<int>("getCaretPosition", target);
+        await MoveCursorToAsync(tokenBase + charOffset);
+    }
+
     [JSInvokable]
     public async Task EnterContentAsync(string content)
     {
@@ -149,6 +172,8 @@
 
         RawContent = RawContent.Insert(CursorPosition, content);
         await RawContentChanged.InvokeAsync(RawContent);
+
+        _InsertIntoToken(content);
 
         CursorPosition += RawContent.Length - oldContentLength;
         await CursorPositionChanged.InvokeAsync(CursorPosition);
@@ -220,6 +245,7 @@
 
             default:
                 RawContent = RawContent.Insert(CursorPosition, key);
+                _InsertIntoToken(key);
                 CursorMenuShown = true;
                 await CursorMenuShownChanged.InvokeAsync(CursorMenuShown);
                 break;
