@@ -33,7 +33,8 @@ public class ExpressionA : NonTerminal<ExpressionDto>
     {
         dto = MatchOptions(source,
             new Ident(),
-            new Parens()
+            new Parens(),
+            new Lambda()
             // , new [...]Literal(), ...
             )
             as ExpressionDto;
