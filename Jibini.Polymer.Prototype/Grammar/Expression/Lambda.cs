@@ -19,8 +19,8 @@ public class Lambda : NonTerminal<LambdaDto>
 {
     override public bool TryMatch(TokenStream source, out LambdaDto? dto)
     {
-        dto = new();
         IList<object?> data;
+        dto = new();
         if (source.Next == Lt)
         {
             data = MatchSeries(source, new TypeParams());
