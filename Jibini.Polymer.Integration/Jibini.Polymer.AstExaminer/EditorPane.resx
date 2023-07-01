@@ -133,6 +133,10 @@ fun Main(args: Array&lt;string&gt;*): int
 {
 	var result = test&lt;string, string&gt;(some_k, some_v);
 	if (!result) { return = EXIT_ERROR; }
+
+	var test: string = "Hello, world!";
+	var math: double = 3f * 0.9d + 0xfeedfacedeadbeef
+                                 - 0b0110100101001010;
 }</value>
   </data>
 </root>

@@ -34,7 +34,11 @@ public class ExpressionA : NonTerminal<ExpressionDto>
         dto = MatchOptions(source,
             new Ident(),
             new Parens(),
-            new Lambda()
+            new Lambda(),
+            StringLit,
+            Number,
+            HexNumber,
+            BinNumber
             // , new [...]Literal(), ...
             )
             as ExpressionDto;

@@ -19,8 +19,23 @@ public enum Token
     If,
     [Pattern(Regex = "else(?=\\s|$)")]
     Else,
+    [Pattern(Regex = "while(?=\\s|$)")]
+    While,
+    [Pattern(Regex = "for(?=\\s|$)")]
+    For,
+    [Pattern(Regex = "in(?=\\s|$)")]
+    In,
     [Pattern(Regex = "[A-Za-z_][A-Za-z0-9_]*")]
     Ident,
+
+    [Pattern(Regex = "0x[0-9a-fA-F]+")]
+    HexNumber,
+    [Pattern(Regex = "0b[01]+")]
+    BinNumber,
+    [Pattern(Regex = "[0-9]+(.[0-9]+)?[fdL]?")]
+    Number,
+    [Pattern(Regex = "\"([^\\\\\\\"]|\\\\.)*\"")]
+    StringLit,
 
     [Pattern(Regex = "\\=\\>")]
     Arrow,
