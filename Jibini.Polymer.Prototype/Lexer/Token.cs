@@ -28,9 +28,7 @@ public enum Token
     [Pattern(Regex = "[A-Za-z_][A-Za-z0-9_]*")]
     Ident,
 
-    [Pattern(Regex = "0x[0-9a-fA-F]+")]
-    HexNumber,
-    [Pattern(Regex = "0b[01]+")]
+    [Pattern(Regex = "0(b[01]{1,64}|x[0-9a-fA-F]{1,16})")]
     BinNumber,
     [Pattern(Regex = "[0-9]+(.[0-9]+)?[fdL]?")]
     Number,

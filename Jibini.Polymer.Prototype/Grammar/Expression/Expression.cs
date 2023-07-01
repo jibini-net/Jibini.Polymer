@@ -35,10 +35,9 @@ public class ExpressionA : NonTerminal<ExpressionDto>
             new Ident(),
             new Parens(),
             new Lambda(),
-            StringLit,
-            Number,
-            HexNumber,
-            BinNumber
+            new StringLit(),
+            new Number(),
+            new BinNumber()
             // , new [...]Literal(), ...
             )
             as ExpressionDto;
@@ -80,9 +79,14 @@ public class ExpressionB : NonTerminal<ExpressionDto>
     override public bool TryMatch(TokenStream source, out ExpressionDto? dto)
     {
         var negate = source.Next == Not;
+        var invert = source.Next == Sub;
         if (negate)
         {
             _ = MatchSeries(source, Not);
+        }
+        if (invert)
+        {
+            _ = MatchSeries(source, Sub);
         }
 
         var data = MatchSeries(source, new ExpressionA());
@@ -110,6 +114,14 @@ public class ExpressionB : NonTerminal<ExpressionDto>
             dto = new ExprUnOpDto()
             {
                 Op = "Negate",
+                Expr = dto
+            };
+        }
+        if (invert)
+        {
+            dto = new ExprUnOpDto()
+            {
+                Op = "Invert",
                 Expr = dto
             };
         }
