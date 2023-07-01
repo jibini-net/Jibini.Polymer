@@ -29,6 +29,8 @@ public class Statements : NonTerminal<List<StatementDto>>
             var data = MatchOptions(source,
                 new Function(),
                 new Declaration(),
+                new IfElse(),
+                // new [...](), ...,
                 new Body(),
                 new ExprStatement(),
                 Semic)

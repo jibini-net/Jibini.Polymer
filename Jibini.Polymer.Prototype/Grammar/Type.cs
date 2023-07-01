@@ -7,8 +7,8 @@ using static Token;
 
 public class TypeDto
 {
-    public string Name { get; set; } = "";
-    public List<TypeDto>? TypeParams { get; set; } = new();
+    public IdentDto Name { get; set; } = new();
+    public int PointerDepth { get; set; }
 }
 
 public class Type : NonTerminal<TypeDto>
@@ -18,14 +18,10 @@ public class Type : NonTerminal<TypeDto>
         var data = MatchSeries(source, new Ident());
         dto = new()
         {
-            Name = (data[0] as IdentDto)?.Name ?? ""
+            Name = (data[0] as IdentDto)!
         };
 
-        if (source.Next == Lt)
-        {
-            data = MatchSeries(source, new TypeParams());
-            dto.TypeParams = data[0] as List<TypeDto>;
-        }
+        for (; source.Next == Mult; MatchSeries(source, Mult), dto.PointerDepth++);
         return Valid;
     }
 }

@@ -76,7 +76,8 @@ public partial class EditorPane : UserControl
             try
             {
                 await Task.Delay(400, cancel.Token);
-            } catch (TaskCanceledException)
+            }
+            catch (TaskCanceledException)
             {
                 return;
             }

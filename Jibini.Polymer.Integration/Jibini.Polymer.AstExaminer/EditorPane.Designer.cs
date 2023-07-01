@@ -13,7 +13,7 @@ namespace Jibini.Polymer.AstExaminer
         /// <summary> 
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary> 
         /// Clean up any resources being used.
@@ -36,6 +36,7 @@ namespace Jibini.Polymer.AstExaminer
         /// </summary>
         private void InitializeComponent()
         {
+            ComponentResourceManager resources = new ComponentResourceManager(typeof(EditorPane));
             richText = new RichTextBox();
             SuspendLayout();
             // 
@@ -54,7 +55,7 @@ namespace Jibini.Polymer.AstExaminer
             richText.Name = "richText";
             richText.Size = new Size(150, 150);
             richText.TabIndex = 3;
-            richText.Text = "fun Main(args: Array<string>): int\n{\n}";
+            richText.Text = resources.GetString("richText.Text");
             richText.WordWrap = false;
             richText.TextChanged += richText_TextChanged;
             // 
