@@ -141,9 +141,9 @@ fun Main(args: Array&lt;string&gt;*): int
 
 while (true = true)
 {
-	for (var thing in other)
+	for (var i: C = new(0); i.Lt(10); i = i + 1)
 	{
-		for (var i = 0; i &lt; 100; i++)
+		for (var thing: T in other)
 		{
 		}
 	}

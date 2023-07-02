@@ -20,7 +20,7 @@ public class Statement : NonTerminal<StatementDto>
             new IfElse(),
             new While(),
             new For(),
-            //new ForEach(),
+            new ForEach(),
             // new [...](), ...,
             new Body(),
             new ExprStatement(),

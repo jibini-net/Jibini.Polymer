@@ -9,7 +9,7 @@ public class ForDto : StatementDto
 {
     public override string _Type => "For";
 
-    public DeclarationDto? Declaration { get; set; }
+    public DeclarationDto Declaration { get; set; } = new();
     public ExpressionDto? Predicate { get; set; }
     public ExpressionDto? Advancement { get; set; }
     public BodyDto Body { get; set; } = new();
