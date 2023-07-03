@@ -14,21 +14,27 @@
 
 @code {
     string contentA = @"
-var zero: int;
-
 fun Main(args: Array<string>): int
 {
-    /* No literals yet, but this may remain a valid return syntax: */
-    return = zero;
+    for (var it in args)
+    {
+        if (it.Length =/*=*/ 1)
+        {
+        } else
+        {
+        }
+    }
 
-    /* If no other return is specified, the set value is kept. */
+    /* This may remain a valid return syntax: */
+    return = 0;
+
+    /* If no other is specified, the value is kept. */
 }
     ".Trim();
 
     string contentB = @"
 var container: Container<dynamic> = new;
-var zero: int;
-var globalCount = zero;
+var globalCount = 0L;
 
 fun DoWork(b: int)
 {

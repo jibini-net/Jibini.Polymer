@@ -3,6 +3,8 @@ using System.Runtime.InteropServices;
 
 namespace Jibini.Polymer.AstExaminer;
 
+using static Token;
+
 public partial class EditorPane : UserControl
 {
     private CancellationTokenSource? cancelTokenize;
@@ -35,11 +37,13 @@ public partial class EditorPane : UserControl
         richText.Select(offset, text.Length);
         richText.SelectionColor = next switch
         {
-            Token.Fun or Token.Var => ColorTranslator.FromHtml("#7fc8e5"),
-            Token.Discard => ColorTranslator.FromHtml("#bbd5df"),
-            Token.Ident => ColorTranslator.FromHtml("#e7fdf6"),
-            Token.LCurly or Token.RCurly => ColorTranslator.FromHtml("#eb67bc"),
-            Token.Unknown => Color.Red,
+            Fun or Var => ColorTranslator.FromHtml("#7fc8e5"),
+            For or While or If or Else => ColorTranslator.FromHtml("#e09ede"),
+            Discard => ColorTranslator.FromHtml("#bbd5df"),
+            Ident => ColorTranslator.FromHtml("#e7fdf6"),
+            LCurly or RCurly => ColorTranslator.FromHtml("#eb67bc"),
+            LParens or RParens => ColorTranslator.FromHtml("#acffff"),
+            Unknown => Color.Red,
             _ => ColorTranslator.FromHtml("#ed7b7b")
         };
     }
@@ -76,8 +80,7 @@ public partial class EditorPane : UserControl
             try
             {
                 await Task.Delay(400, cancel.Token);
-            }
-            catch (TaskCanceledException)
+            } catch (TaskCanceledException)
             {
                 return;
             }
@@ -87,6 +90,11 @@ public partial class EditorPane : UserControl
             await foreach (var tok in _tokens)
             {
                 tokens.Add(tok);
+            }
+
+            if (cancel.IsCancellationRequested)
+            {
+                return;
             }
             Invoke(() => _Highlight());
         });
