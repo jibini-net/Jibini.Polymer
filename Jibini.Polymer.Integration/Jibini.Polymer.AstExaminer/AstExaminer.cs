@@ -36,6 +36,10 @@ namespace Jibini.Polymer.AstExaminer
                 }
 
                 var valid = new Statements(null).TryMatch(editorPane.richText.Invoke(() => editorPane.richText.Text), out var dto);
+                if (cancel.IsCancellationRequested)
+                {
+                    return;
+                }
                 jsonOutput.ForeColor = valid ? Color.Green : Color.Red;
                 Invoke(() => jsonOutput.Text = JsonConvert.SerializeObject(dto, Formatting.Indented));
             });

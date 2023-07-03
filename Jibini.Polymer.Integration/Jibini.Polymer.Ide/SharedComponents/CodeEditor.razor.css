@@ -104,11 +104,23 @@
     color: #7fc8e5
 }
 
+.ch_For, .ch_While, .ch_If, .ch_Else {
+    color: #e09ede;
+}
+
 .ch_LCurly, .ch_RCurly {
     color: #eb67bc;
+}
+
+.ch_LParens, .ch_RParens {
+    color: #acffff;
 }
 
 .ch_Discard {
     color: #bbd5df;
     white-space: pre !important;
+}
+
+.ch_Unknown {
+    color: red;
 }
