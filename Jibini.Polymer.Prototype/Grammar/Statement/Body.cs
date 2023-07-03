@@ -16,20 +16,18 @@ public class Body : NonTerminal<BodyDto>
 {
     override public bool TryMatch(TokenStream source, out BodyDto? dto)
     {
+        dto = new();
         if (source.Next != LCurly)
         {
-            dto = new();
             return Valid = false;
         }
+
         var data = MatchSeries(source,
             LCurly,
                 new Statements(endToken: RCurly),
             RCurly
             );
-        dto = new()
-        {
-            Statements = (data[1] as List<StatementDto>)!
-        };
+        dto.Statements = (data[1] as List<StatementDto>)!;
         return Valid;
     }
 }

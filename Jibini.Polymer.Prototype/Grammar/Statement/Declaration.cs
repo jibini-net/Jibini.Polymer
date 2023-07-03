@@ -9,7 +9,7 @@ public class DeclarationDto : StatementDto
 {
     override public string _Type => "Declaration";
 
-    public string Name { get; set; } = "";
+    public IdentDto Name { get; set; } = new();
     public TypeDto? Type { get; set; }
     public ExpressionDto? InitialValue { get; set; }
 }
@@ -23,7 +23,7 @@ public class Declaration : NonTerminal<DeclarationDto>
             );
         dto = new()
         {
-            Name = (data[1] as IdentDto)?.Name ?? ""
+            Name = (data[1] as IdentDto)!
         };
 
         if (source.Next == Colon)

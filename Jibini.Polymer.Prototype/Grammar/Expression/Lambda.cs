@@ -5,29 +5,22 @@ namespace Jibini.Polymer.Prototype.Grammar;
 
 using static Token;
 
-public class FunctionDto : StatementDto
+public class LambdaDto : ExpressionDto
 {
-    override public string _Type => "Function";
+    public override string _Type => "Lambda";
 
-    public IdentDto Name { get; set; } = new();
     public List<TypeDto>? TypeParams { get; set; }
     public List<ParameterDto> Parameters { get; set; } = new();
     public TypeDto? ReturnType { get; set; }
     public BodyDto Body { get; set; } = new();
 }
 
-public class Function : NonTerminal<FunctionDto>
+public class Lambda : NonTerminal<LambdaDto>
 {
-    override public bool TryMatch(TokenStream source, out FunctionDto? dto)
+    override public bool TryMatch(TokenStream source, out LambdaDto? dto)
     {
-        var data = MatchSeries(source,
-            Fun, new Ident()
-            );
-        dto = new()
-        {
-            Name = (data[1] as IdentDto)!
-        };
-
+        IList<object?> data;
+        dto = new();
         if (source.Next == Lt)
         {
             data = MatchSeries(source, new TypeParams());
@@ -36,7 +29,7 @@ public class Function : NonTerminal<FunctionDto>
 
         data = MatchSeries(source, new Parameters());
         dto.Parameters = (data[0] as List<ParameterDto>)!;
-        
+
         if (source.Next == Colon)
         {
             data = MatchSeries(source,
@@ -45,8 +38,10 @@ public class Function : NonTerminal<FunctionDto>
             dto.ReturnType = data[1] as TypeDto;
         }
 
-        data = MatchSeries(source, new Body());
-        dto.Body = (data[0] as BodyDto)!;
+        data = MatchSeries(source,
+            Arrow, new Body()
+            );
+        dto.Body = (data[1] as BodyDto)!;
         return Valid;
     }
 }
