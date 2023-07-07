@@ -5,7 +5,7 @@ namespace Jibini.Polymer.Prototype.Grammar;
 
 using static Token;
 
-public class IdentDto : ExpressionDto
+public class IdentDto : ExpressionDto, IEquatable<IdentDto>
 {
     public override string _Type => "Ident";
 
@@ -19,6 +19,16 @@ public class IdentDto : ExpressionDto
     public IdentDto(TokenStream source)
     {
         Name = source.Text;
+    }
+
+    public bool Equals(IdentDto? other)
+    {
+        return other?.Name == Name && other?.TypeParams?.Count == TypeParams?.Count;
+    }
+
+    public override int GetHashCode()
+    {
+        return Name.GetHashCode();
     }
 }
 
