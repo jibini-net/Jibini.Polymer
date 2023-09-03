@@ -1,4 +1,4 @@
-// Copyright (c) 2022 Zach Goethel
+// Copyright (c) 2022-2023 Zach Goethel
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -31,6 +31,23 @@
 
 #include "io/source.h"
 
+// Test tokens
+#define _DISCARD 9999
+#define _SCHEMA 1
+#define _PARTIAL 2
+#define _REPO 3
+#define _SERVICE 4
+#define _JSON 5
+#define _IDENT 6
+#define _LCURLY 7
+#define _RCURLY 8
+#define _LPAREN 9
+#define _RPAREN 10
+#define _COMMA 11
+#define _SPLAT 12
+#define _ASSIGN 13
+#define _ARROW 14
+
 int main(int arg_c, char **arg_v)
 {
     /*
@@ -48,34 +65,34 @@ int main(int arg_c, char **arg_v)
     shutdown();
     return result;
     */
-    fsa_node_t test1 = {0};
-    fsa_node_t test2 = {0};
-    fsa_node_t test3 = {0};
-
     fsa_node_t test = {0};
-    test.actions = (dfa_jump_t *)malloc(sizeof(dfa_jump_t));
-    *test.actions = (dfa_jump_t){0};
-    test.actions->letter = 'a';
-    test.actions->node = &test2;
 
-    nfa_jump_t _chain = {0};
-    test.eps = &_chain;
-    nfa_jump_t *chain = &_chain;
+    char word[240] = {0};
+    char *letters = "a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z";
+    char *cap_letters = "A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z";
+    char *numbers = "0|1|2|3|4|5|6|7|8|9";
+    snprintf(word, sizeof(word), "(%s|%s|_)+(|(%s|%s|%s|_)+)",
+        letters, cap_letters,
+        letters, cap_letters, numbers);
+    
+    build_nfa(&test, "schema",        _SCHEMA);
+    build_nfa(&test, "partial",       _PARTIAL);
+    build_nfa(&test, "repo",          _REPO);
+    build_nfa(&test, "service",       _SERVICE);
+    build_nfa(&test, "json",          _JSON);
+    build_nfa(&test, word,            _IDENT);
+    build_nfa(&test, "\\{",           _LCURLY);
+    build_nfa(&test, "\\}",           _RCURLY);
+    build_nfa(&test, "\\(",           _LPAREN);
+    build_nfa(&test, "\\)",           _RPAREN);
+    build_nfa(&test, "\\,",           _COMMA);
+    build_nfa(&test, "\\.\\.\\.",     _SPLAT);
+    build_nfa(&test, "\\=",           _ASSIGN);
+    build_nfa(&test, "\\=\\>",        _ARROW);
+    build_nfa(&test, "( |\n|\r|\t)+", _DISCARD);
 
-    chain->node = &test1;
-
-    chain = (chain->_next) = (nfa_jump_t *)malloc(sizeof(nfa_jump_t));
-    *chain = (nfa_jump_t){0};
-
-    chain->node = &test2;
-
-    chain = (chain->_next) = (nfa_jump_t *)malloc(sizeof(nfa_jump_t));
-    *chain = (nfa_jump_t){0};
-
-    chain->node = &test3;
-
-    eps_closure_t test_eps = epsilon_closure(&test);
-    eps_closure_t test_eps_a = epsilon_closure_on(&test, 'a');
+    //TODO Dispose NFA, DFA in heap
+    //test = *(convert_to_dfa(&test));
 }
 
 void shutdown()

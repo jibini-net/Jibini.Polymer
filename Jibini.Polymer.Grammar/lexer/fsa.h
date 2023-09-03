@@ -123,4 +123,4 @@ nfa_jump_t *build_nfa(fsa_node_t *fsa, char *pattern, int32_t accept);
 
 // Performs an expensive conversion from NFA to DFA, which ensures each distinct
 // node has at most one possible transition per character input
-fsa_node_t convert_to_dfa(fsa_node_t *fsa);
+fsa_node_t *convert_to_dfa(fsa_node_t *fsa);
