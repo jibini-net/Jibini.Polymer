@@ -1,4 +1,4 @@
-## Copyright (c) 2022 Zach Goethel
+## Copyright (c) 2022-2023 Zach Goethel
 ## 
 ## Permission is hereby granted, free of charge, to any person obtaining a copy
 ## of this software and associated documentation files (the "Software"), to deal
@@ -49,6 +49,8 @@ add_executable(Jibini.Polymer.Grammar "Jibini.Polymer.Grammar.c"
     "io/error.h"
     "io/source.c"
     "io/source.h"
+    "lexer/fsa.c"
+    "lexer/fsa.h"
     "parser/pincludes.c"
     "parser/pincludes.h"
     "parser/source_map.c"
