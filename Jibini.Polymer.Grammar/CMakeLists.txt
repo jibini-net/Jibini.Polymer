@@ -49,6 +49,8 @@ add_executable(Jibini.Polymer.Grammar "Jibini.Polymer.Grammar.c"
     "io/error.h"
     "io/source.c"
     "io/source.h"
+    "parser/pincludes.c"
+    "parser/pincludes.h"
     "parser/source_map.c"
     "parser/source_map.h"
     ${FLEX_Lexer_OUTPUTS}

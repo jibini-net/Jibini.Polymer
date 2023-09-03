@@ -37,6 +37,14 @@
 %type <string_t> _Ident
 %type <string_t> Ident
 %type <ptr_t> Prog
+%type <ptr_t> TopLevels
+%type <ptr_t> TopLevel
+%type <ptr_t> TypeDecl
+%type <ptr_t> Declaration
+%type <ptr_t> Function
+%type <ptr_t> Vars
+%type <ptr_t> Var
+%type <ptr_t> Type
 
 %token VAR
 %token IF
@@ -72,33 +80,33 @@
 %token BUFFER
 
 %%
-Prog            : TopLevels                                 { $$ = NULL; }
-                |                                           { }
-TopLevels       : TopLevels TopLevel                        { }
-                | TopLevel                                  { }
+Prog            : TopLevels                                 { $$ = tok__Prog__a($1); }
+                |                                           { $$ = tok__Prog__b(); }
+TopLevels       : TopLevels TopLevel                        { $$ = tok__TopLevels__a($1, $2); }
+                | TopLevel                                  { $$ = tok__TopLevels__b($1); }
 
                 /* Valid top-level declaration types */
-TopLevel        : TypeDecl                                  { }
-                | Declaration                               { }
-                | Function                                  { }
+TopLevel        : TypeDecl                                  { $$ = tok__TopLevel__a($1); }
+                | Declaration                               { $$ = tok__TopLevel__b($1); }
+                | Function                                  { $$ = tok__TopLevel__c($1); }
                 /* Error boundary to prevent process from exiting */
-                | error                                     { }
+                | error                                     { $$ = NULL; }
 
                 /* Type interface and structure definitions */
 TypeDecl        : TYPE Ident SemiC                          { free($2); }
                 | INTERFACE Ident SemiC                     { free($2); }
 
                 /* Global and inline variable declarations */
-Vars            : Vars ',' Var                              { }
-                | Var                                       { }
-Var             : Ident Colon Type                          { free($1); }
-                | '*' Ident Colon Type                      { free($2); }
+Vars            : Vars ',' Var                              { $$ = tok__Vars__a($1, $3); }
+                | Var                                       { $$ = tok__Vars__b($1); }
+Var             : Ident Colon Type                          { $$ = tok__Var__a($1, $3); }
+                | '*' Ident Colon Type                      { $$ = tok__Var__b($2, $4); }
 Declaration     : VAR Vars SemiC                            { }
 Type            : Ident TypeParam                           { free($1); }
-                | Ident                                     { free($1); }
 Types           : Types ',' Type                            { }
                 | Type                                      { }
 TypeParam       : LT Types Gt                               { }
+                |                                           { }
 
                 /* Function signature and body definitions */
 Function        : FUN Ident TypeParam
