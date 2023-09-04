@@ -161,9 +161,7 @@ nfa_jump_t *build_nfa(fsa_node_t *fsa, char *pattern, int32_t accept)
                     state->node->eps = list_entry;
                 }
 
-                //TODO Dispose frontier
                 frontier = build_nfa(sub_expr, &pattern[reg_index + 1], 0);
-                
                 tail = &frontier;
                 // Move tail forward to end
                 for (; *tail; tail = &(*tail)->_next);
@@ -184,7 +182,6 @@ nfa_jump_t *build_nfa(fsa_node_t *fsa, char *pattern, int32_t accept)
         is_escaped = false;
     escaped:
 
-        //TODO Track all of these for leaks
         fsa_node_t *use_state = (fsa_node_t *)malloc(sizeof(fsa_node_t));
         *use_state = (fsa_node_t){0};
         use_state->letter = c;
@@ -218,7 +215,6 @@ nfa_jump_t *build_nfa(fsa_node_t *fsa, char *pattern, int32_t accept)
             }
         }
 
-        //TODO Dispose frontier
         frontier = (nfa_jump_t *)malloc(sizeof(nfa_jump_t));
         *frontier = (nfa_jump_t){0};
         frontier->node = use_state;

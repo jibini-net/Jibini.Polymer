@@ -91,7 +91,6 @@ int main(int arg_c, char **arg_v)
     build_nfa(&test, "\\=\\>",        _ARROW);
     build_nfa(&test, "( |\n|\r|\t)+", _DISCARD);
 
-    //TODO Dispose NFA, DFA in heap
     //test = *(convert_to_dfa(&test));
 }
 
