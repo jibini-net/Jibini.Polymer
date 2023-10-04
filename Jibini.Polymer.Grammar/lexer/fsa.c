@@ -206,7 +206,7 @@ nfa_jump_t *build_nfa(fsa_node_t *fsa, char *pattern, int32_t accept)
                 state->node->eps = list_entry;
             } else
             {
-                dfa_jump_t *list_entry = (dfa_jump_t *)malloc(sizeof(nfa_jump_t));
+                dfa_jump_t *list_entry = (dfa_jump_t *)malloc(sizeof(dfa_jump_t));
                 *list_entry = (dfa_jump_t){0};
                 list_entry->letter = c;
                 list_entry->node = use_state;
