@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jibini.Polymer.Ide.Server",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jibini.Polymer.AstExaminer", "Jibini.Polymer.Integration\Jibini.Polymer.AstExaminer\Jibini.Polymer.AstExaminer.csproj", "{2EB2B7FF-C803-4D33-A684-3C5A2C64BB8B}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SourceGenerator", "SourceGeneration\SourceGenerator\SourceGenerator.csproj", "{CACBEB63-BE69-4AFB-ACA5-2F950681E941}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{2EB2B7FF-C803-4D33-A684-3C5A2C64BB8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2EB2B7FF-C803-4D33-A684-3C5A2C64BB8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2EB2B7FF-C803-4D33-A684-3C5A2C64BB8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CACBEB63-BE69-4AFB-ACA5-2F950681E941}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CACBEB63-BE69-4AFB-ACA5-2F950681E941}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CACBEB63-BE69-4AFB-ACA5-2F950681E941}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CACBEB63-BE69-4AFB-ACA5-2F950681E941}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

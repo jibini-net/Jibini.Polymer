@@ -1,4 +1,6 @@
-﻿using System.Runtime.CompilerServices;
+﻿using SourceGenerator;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace Jibini.Polymer.Prototype.Lexer;
 
@@ -68,6 +70,23 @@ public class TokenStream
     /// </summary>
     public bool SkipDiscard { get; set; } = true;
 
+    private static Fsa fsa = new();
+
+    static TokenStream()
+    {
+        foreach (var tok in Enum.GetValues<Token>())
+        {
+            foreach (var pattern in typeof(Token)
+                .GetField(tok.ToString())!
+                .GetCustomAttributes<PatternAttribute>(false))
+            {
+                fsa.Build(pattern.Regex, (int)tok);
+            }
+        }
+
+        fsa = fsa.ConvertToDfa().MinimizeDfa();
+    }
+
     public TokenStream(string source)
     {
         this.source = source;
@@ -87,6 +106,7 @@ public class TokenStream
             return null;
         }
         // Tokens are ordered statically in the intended evaluation order
+        /*
         foreach (var tok in Enum.GetValues<Token>())
         {
             var matched = tok.GetPatterns()
@@ -99,6 +119,20 @@ public class TokenStream
                 return token!.Value;
             }
         }
+        */
+        var (token, match) = fsa.Search(source, Offset);
+        if (token > 0 && match.Length > 0)
+        {
+            _Text = match;
+            this.token = (Token)token;
+            return this.token!.Value;
+        } else
+        {
+            _Text = source[Offset] + "";
+            this.token = Token.Discard;
+            return this.token!.Value;
+        }
+
         throw new Exception("Unexpected content");
     }
 
