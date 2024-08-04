@@ -7,13 +7,13 @@ public class WhileDto : StatementDto
 {
     public override string _Type => "While";
 
-    public ExpressionDto? Predicate { get; set; }
+    public ExpressionDto Predicate { get; set; }
     public BodyDto Body { get; set; } = new();
 }
 
 public class While : NonTerminal<WhileDto>
 {
-    public override bool TryMatch(TokenStream source, out WhileDto? dto)
+    public override bool TryMatch(TokenStream source, out WhileDto dto)
     {
         var data = MatchSeries(source,
             Token.While, new Parens(),
@@ -22,7 +22,7 @@ public class While : NonTerminal<WhileDto>
         dto = new()
         {
             Predicate = data[1] as ExpressionDto,
-            Body = (data[2] as BodyDto)!
+            Body = data[2] as BodyDto
         };
         return Valid;
     }

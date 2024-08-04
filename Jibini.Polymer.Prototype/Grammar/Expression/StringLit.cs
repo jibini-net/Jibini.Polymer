@@ -15,7 +15,7 @@ public class StringLitDto : ExpressionDto
 
     public StringLitDto(TokenStream source)
     {
-        Value = source.Text.Substring(1, source.Text.Length - 2);
+        Value = source.Text[1..^1];
     }
 }
 
@@ -25,7 +25,7 @@ public class StringLit : Terminal<StringLitDto>
     {
     }
 
-    public override bool TryMatch(TokenStream source, out StringLitDto? dto)
+    public override bool TryMatch(TokenStream source, out StringLitDto dto)
     {
         if (!base.TryMatch(source, out dto))
         {

@@ -10,22 +10,22 @@ public class FunctionDto : StatementDto
     override public string _Type => "Function";
 
     public IdentDto Name { get; set; } = new();
-    public List<TypeDto>? TypeParams { get; set; }
-    public List<ParameterDto> Parameters { get; set; } = new();
-    public TypeDto? ReturnType { get; set; }
+    public List<TypeDto> TypeParams { get; set; }
+    public List<ParameterDto> Parameters { get; set; } = [];
+    public TypeDto ReturnType { get; set; }
     public BodyDto Body { get; set; } = new();
 }
 
 public class Function : NonTerminal<FunctionDto>
 {
-    override public bool TryMatch(TokenStream source, out FunctionDto? dto)
+    override public bool TryMatch(TokenStream source, out FunctionDto dto)
     {
         var data = MatchSeries(source,
             Fun, new Ident()
             );
         dto = new()
         {
-            Name = (data[1] as IdentDto)!
+            Name = data[1] as IdentDto
         };
 
         if (source.Next == Lt)
@@ -35,7 +35,7 @@ public class Function : NonTerminal<FunctionDto>
         }
 
         data = MatchSeries(source, new Parameters());
-        dto.Parameters = (data[0] as List<ParameterDto>)!;
+        dto.Parameters = data[0] as List<ParameterDto>;
         
         if (source.Next == Colon)
         {
@@ -46,7 +46,7 @@ public class Function : NonTerminal<FunctionDto>
         }
 
         data = MatchSeries(source, new Body());
-        dto.Body = (data[0] as BodyDto)!;
+        dto.Body = data[0] as BodyDto;
         return Valid;
     }
 }

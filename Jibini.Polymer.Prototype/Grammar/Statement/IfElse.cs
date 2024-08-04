@@ -9,14 +9,14 @@ public class IfElseDto : StatementDto
 {
     public override string _Type => "IfElse";
 
-    public ExpressionDto? Predicate { get; set; }
+    public ExpressionDto Predicate { get; set; }
     public BodyDto Body { get; set; } = new();
-    public BodyDto? ElseBody { get; set; }
+    public BodyDto ElseBody { get; set; }
 }
 
 public class IfElse : NonTerminal<IfElseDto>
 {
-    public override bool TryMatch(TokenStream source, out IfElseDto? dto)
+    public override bool TryMatch(TokenStream source, out IfElseDto dto)
     {
         var data = MatchSeries(source,
             If, new Parens(),
@@ -25,7 +25,7 @@ public class IfElse : NonTerminal<IfElseDto>
         dto = new()
         {
             Predicate = data[1] as ExpressionDto,
-            Body = (data[2] as BodyDto)!
+            Body = data[2] as BodyDto
         };
 
         if (source.Next == Else)

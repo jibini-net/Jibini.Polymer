@@ -9,12 +9,12 @@ public class BodyDto : StatementDto
 {
     override public string _Type => "Body";
 
-    public List<StatementDto> Statements { get; set; } = new();
+    public List<StatementDto> Statements { get; set; } = [];
 }
 
 public class Body : NonTerminal<BodyDto>
 {
-    override public bool TryMatch(TokenStream source, out BodyDto? dto)
+    override public bool TryMatch(TokenStream source, out BodyDto dto)
     {
         dto = new();
         if (source.Next != LCurly)
@@ -27,7 +27,7 @@ public class Body : NonTerminal<BodyDto>
                 new Statements(endToken: RCurly),
             RCurly
             );
-        dto.Statements = (data[1] as List<StatementDto>)!;
+        dto.Statements = data[1] as List<StatementDto>;
         return Valid;
     }
 }

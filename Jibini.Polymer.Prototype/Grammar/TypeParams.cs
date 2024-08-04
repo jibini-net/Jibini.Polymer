@@ -7,15 +7,15 @@ using static Token;
 
 public class TypeParams : NonTerminal<List<TypeDto>>
 {
-    override public bool TryMatch(TokenStream source, out List<TypeDto>? dto)
+    override public bool TryMatch(TokenStream source, out List<TypeDto> dto)
     {
-        dto = new();
+        dto = [];
         _ = MatchSeries(source, Lt);
 
         while (Valid && source.Next != Gt)
         {
             var data = MatchSeries(source, new Type());
-            dto.Add((data[0] as TypeDto)!);
+            dto.Add(data[0] as TypeDto);
 
             if (source.Next != Gt)
             {

@@ -15,8 +15,8 @@ public class ExprBiOpDto : ExpressionDto
     public override string _Type => "Binary";
 
     public string Op { get; set; } = "";
-    public ExpressionDto? Expr1 { get; set; }
-    public ExpressionDto? Expr2 { get; set; }
+    public ExpressionDto Expr1 { get; set; }
+    public ExpressionDto Expr2 { get; set; }
 }
 
 public class ExprUnOpDto : ExpressionDto
@@ -24,12 +24,12 @@ public class ExprUnOpDto : ExpressionDto
     public override string _Type => "Unary";
 
     public string Op { get; set; } = "";
-    public ExpressionDto? Expr { get; set; }
+    public ExpressionDto Expr { get; set; }
 }
 
 public class ExpressionA : NonTerminal<ExpressionDto>
 {
-    override public bool TryMatch(TokenStream source, out ExpressionDto? dto)
+    override public bool TryMatch(TokenStream source, out ExpressionDto dto)
     {
         dto = MatchOptions(source,
             new Ident(),
@@ -53,7 +53,7 @@ public class ExpressionA : NonTerminal<ExpressionDto>
                         );
                     dto = new ExprBiOpDto()
                     {
-                        Op = n!.Value.ToString(),
+                        Op = n.Value.ToString(),
                         Expr1 = dto,
                         Expr2 = data[1] as ExpressionDto
                     };
@@ -61,7 +61,7 @@ public class ExpressionA : NonTerminal<ExpressionDto>
 
                 case LParens:
                     data = MatchSeries(source, new FuncCall());
-                    (data[0] as FuncCallDto)!.Target = dto;
+                    (data[0] as FuncCallDto).Target = dto;
                     dto = data[0] as FuncCallDto;
                     break;
 
@@ -76,7 +76,7 @@ public class ExpressionA : NonTerminal<ExpressionDto>
 
 public class ExpressionB : NonTerminal<ExpressionDto>
 {
-    override public bool TryMatch(TokenStream source, out ExpressionDto? dto)
+    override public bool TryMatch(TokenStream source, out ExpressionDto dto)
     {
         var negate = source.Next == Not;
         var invert = source.Next == Sub;
@@ -99,7 +99,7 @@ public class ExpressionB : NonTerminal<ExpressionDto>
             {
                 case Caret:
                     data = MatchSeries(source, new Exponent());
-                    (data[0] as ExprBiOpDto)!.Expr1 = dto;
+                    (data[0] as ExprBiOpDto).Expr1 = dto;
                     dto = data[0] as ExprBiOpDto;
                     break;
 
@@ -131,7 +131,7 @@ public class ExpressionB : NonTerminal<ExpressionDto>
 
 public class ExpressionC : NonTerminal<ExpressionDto>
 {
-    override public bool TryMatch(TokenStream source, out ExpressionDto? dto)
+    override public bool TryMatch(TokenStream source, out ExpressionDto dto)
     {
         var data = MatchSeries(source, new ExpressionB());
         dto = data[0] as ExpressionDto;
@@ -149,7 +149,7 @@ public class ExpressionC : NonTerminal<ExpressionDto>
                         );
                     dto = new ExprBiOpDto()
                     {
-                        Op = n!.Value.ToString(),
+                        Op = n.Value.ToString(),
                         Expr1 = dto,
                         Expr2 = data[1] as ExpressionDto
                     };
@@ -166,7 +166,7 @@ public class ExpressionC : NonTerminal<ExpressionDto>
 
 public class ExpressionD : NonTerminal<ExpressionDto>
 {
-    override public bool TryMatch(TokenStream source, out ExpressionDto? dto)
+    override public bool TryMatch(TokenStream source, out ExpressionDto dto)
     {
         var data = MatchSeries(source, new ExpressionC());
         dto = data[0] as ExpressionDto;
@@ -183,7 +183,7 @@ public class ExpressionD : NonTerminal<ExpressionDto>
                         );
                     dto = new ExprBiOpDto()
                     {
-                        Op = n!.Value.ToString(),
+                        Op = n.Value.ToString(),
                         Expr1 = dto,
                         Expr2 = data[1] as ExpressionDto
                     };
@@ -200,7 +200,7 @@ public class ExpressionD : NonTerminal<ExpressionDto>
 
 public class Expression : NonTerminal<ExpressionDto>
 {
-    override public bool TryMatch(TokenStream source, out ExpressionDto? dto)
+    override public bool TryMatch(TokenStream source, out ExpressionDto dto)
     {
         dto = MatchOptions(source,
             new Assignment(),
@@ -215,12 +215,12 @@ public class ExprStatementDto : StatementDto
 {
     public override string _Type => "Expr";
 
-    public ExpressionDto? Expr { get; set; }
+    public ExpressionDto Expr { get; set; }
 }
 
 public class ExprStatement : NonTerminal<ExprStatementDto>
 {
-    override public bool TryMatch(TokenStream source, out ExprStatementDto? dto)
+    override public bool TryMatch(TokenStream source, out ExprStatementDto dto)
     {
         var data = MatchSeries(source,
             new Expression(), Semic

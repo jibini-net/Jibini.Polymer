@@ -7,16 +7,9 @@ namespace Jibini.Polymer.Prototype.Parser;
 /// syntax tree. Creates an object containing names, types, and other details.
 /// </summary>
 /// <typeparam name="T">DTO class which will be instantiated with details.</typeparam>
-public class Terminal<T> : NonTerminal<T> where T : class
+public class Terminal<T>(Token terminal) : NonTerminal<T> where T : class
 {
-    private readonly Token terminal;
-
-    public Terminal(Token terminal)
-    {
-        this.terminal = terminal;
-    }
-
-    override public bool TryMatch(TokenStream source, out T? dto)
+    override public bool TryMatch(TokenStream source, out T dto)
     {
         if (source.Next != terminal)
         {
@@ -32,13 +25,13 @@ public class Terminal<T> : NonTerminal<T> where T : class
 
         // Output parameter will be populated if there is a constructor on the
         // DTO type accepting a single parameter which is a stream of tokens.
-        var factory = typeof(T).GetConstructor(new[] { typeof(TokenStream) });
-        dto = factory?.Invoke(new[] { source }) as T;
+        var factory = typeof(T).GetConstructor([typeof(TokenStream)]);
+        dto = factory?.Invoke([source]) as T;
         // Can fall back to zero-argument constructor where state not needed
         if (dto is null)
         {
-            factory = typeof(T).GetConstructor(Array.Empty<Type>());
-            dto = factory?.Invoke(Array.Empty<object?>()) as T;
+            factory = typeof(T).GetConstructor([]);
+            dto = factory?.Invoke([]) as T;
         }
 
     accept_and_exit:

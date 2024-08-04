@@ -7,7 +7,7 @@ using static Token;
 
 public class Parens : NonTerminal<ExpressionDto>
 {
-    override public bool TryMatch(TokenStream source, out ExpressionDto? dto)
+    override public bool TryMatch(TokenStream source, out ExpressionDto dto)
     {
         if (source.Next != LParens)
         {

@@ -13,8 +13,8 @@ public class TokenMatch
     public Token Token { get; set; }
     public int Index { get; set; }
     public string Text { get; set; } = "";
-    public object? AstNode { get; set; }
-    public object? AstDto { get; set; }
+    public object AstNode { get; set; }
+    public object AstDto { get; set; }
 }
 
 /// <summary>
@@ -56,7 +56,7 @@ public class TokenStream(string source)
     // Previous tokens, allowing source to be mapped to the AST
     public List<TokenMatch> SourceMap { get; set; } = [];
 
-    private string? _Text;
+    private string _Text;
     /// <summary>
     /// Matched string content of the next available token in the stream, taken
     /// directly from the string content matched by regex.
@@ -75,7 +75,7 @@ public class TokenStream(string source)
         foreach (var tok in Enum.GetValues<Token>())
         {
             foreach (var pattern in typeof(Token)
-                .GetField(tok.ToString())!
+                .GetField(tok.ToString())
                 .GetCustomAttributes<PatternAttribute>(false))
             {
                 fsa.Build(pattern.Regex, (int)tok);
@@ -109,7 +109,7 @@ public class TokenStream(string source)
             {
                 _Text = matched.Value;
                 token = tok;
-                return token!.Value;
+                return token.Value;
             }
         }
         */
@@ -118,12 +118,12 @@ public class TokenStream(string source)
         {
             _Text = match;
             this.token = (Token)token;
-            return this.token!.Value;
+            return this.token.Value;
         } else
         {
             _Text = source[Offset] + "";
             this.token = Token.Discard;
-            return this.token!.Value;
+            return this.token.Value;
         }
 
         //throw new Exception("Unexpected content");
@@ -140,7 +140,7 @@ public class TokenStream(string source)
             // Resort to stored value to reduce duplicate work
             if (token is not null)
             {
-                return token!.Value;
+                return token.Value;
             }
             // Reached EOF condition
             if (Offset >= source.Length)
@@ -154,7 +154,7 @@ public class TokenStream(string source)
                 Poll();
                 return Next;
             }
-            return token!.Value;
+            return token.Value;
         }
     }
 
@@ -184,7 +184,7 @@ public class TokenStream(string source)
             {
                 Index = Offset,
                 Text = Text,
-                Token = Next!.Value
+                Token = Next.Value
             };
         }
     }

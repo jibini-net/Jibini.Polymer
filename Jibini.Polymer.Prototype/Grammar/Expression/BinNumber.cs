@@ -16,7 +16,7 @@ public class BinNumberDto : ExpressionDto
 
     public BinNumberDto(TokenStream source)
     {
-        var bits = source.Text.Substring(2);
+        var bits = source.Text[2..];
         switch (source.Text[1])
         {
             case 'x':
@@ -38,7 +38,7 @@ public class BinNumber : Terminal<BinNumberDto>
     {
     }
 
-    public override bool TryMatch(TokenStream source, out BinNumberDto? dto)
+    public override bool TryMatch(TokenStream source, out BinNumberDto dto)
     {
         if (!base.TryMatch(source, out dto))
         {

@@ -10,7 +10,7 @@ public class IdentDto : ExpressionDto
     public override string _Type => "Ident";
 
     public string Name { get; set; } = "";
-    public List<TypeDto>? TypeParams { get; set; }
+    public List<TypeDto> TypeParams { get; set; }
 
     public IdentDto()
     {
@@ -28,7 +28,7 @@ public class Ident : Terminal<IdentDto>
     {
     }
 
-    public override bool TryMatch(TokenStream source, out IdentDto? dto)
+    public override bool TryMatch(TokenStream source, out IdentDto dto)
     {
         if (!base.TryMatch(source, out dto))
         {
@@ -39,7 +39,7 @@ public class Ident : Terminal<IdentDto>
         if (source.Next == Lt)
         {
             var data = MatchSeries(source, new TypeParams());
-            dto!.TypeParams = data[0] as List<TypeDto>;
+            dto.TypeParams = data[0] as List<TypeDto>;
         }
         return Valid;
     }

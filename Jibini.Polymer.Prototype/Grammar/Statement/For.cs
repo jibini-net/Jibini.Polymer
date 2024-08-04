@@ -10,16 +10,16 @@ public class ForDto : StatementDto
     public override string _Type => "For";
 
     public DeclarationDto Declaration { get; set; } = new();
-    public ExpressionDto? Predicate { get; set; }
-    public ExpressionDto? Advancement { get; set; }
+    public ExpressionDto Predicate { get; set; }
+    public ExpressionDto Advancement { get; set; }
     public BodyDto Body { get; set; } = new();
 }
 
 public class For : NonTerminal<ForDto>
 {
-    public override bool TryMatch(TokenStream source, out ForDto? dto)
+    public override bool TryMatch(TokenStream source, out ForDto dto)
     {
-        IList<object?> data;
+        IList<object> data;
         dto = new();
         if (source.Next != Token.For)
         {
@@ -49,7 +49,7 @@ public class For : NonTerminal<ForDto>
             RParens,
             new Body()
             );
-        dto.Body = (data[1] as BodyDto)!;
+        dto.Body = data[1] as BodyDto;
         return Valid;
     }
 }

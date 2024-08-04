@@ -7,7 +7,7 @@ using static Token;
 
 public class Exponent : NonTerminal<ExprBiOpDto>
 {
-    override public bool TryMatch(TokenStream source, out ExprBiOpDto? dto)
+    override public bool TryMatch(TokenStream source, out ExprBiOpDto dto)
     {
         dto = new()
         {

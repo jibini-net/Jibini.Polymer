@@ -24,7 +24,7 @@ public abstract class NonTerminal
     /// <param name="source">Stream from which tokens are consumed.</param>
     /// <param name="dto">Object in which text literal details can be placed.</param>
     /// <returns>Whether the syntax was matched in a valid fashion.</returns>
-    public abstract bool TryMatch(TokenStream source, out object? dto);
+    public abstract bool TryMatch(TokenStream source, out object dto);
 
     /// <summary>
     /// Whether the syntax is valid for this element in the source. Initially
@@ -32,7 +32,7 @@ public abstract class NonTerminal
     /// </summary>
     public bool Valid { get; protected set; } = true;
 
-    private IEnumerable<object?> _MatchSeries(TokenStream source, params NonTerminal[] series)
+    private IEnumerable<object> _MatchSeries(TokenStream source, params NonTerminal[] series)
     {
         foreach (var nonTerm in series)
         {
@@ -48,7 +48,7 @@ public abstract class NonTerminal
     /// <param name="source">Stream from which tokens are consumed.</param>
     /// <param name="series">Ordered series of constituent non-terminals.</param>
     /// <returns>Ordered set of DTOs corresponding to each member.</returns>
-    protected IList<object?> MatchSeries(TokenStream source, params NonTerminal[] series) =>
+    protected IList<object> MatchSeries(TokenStream source, params NonTerminal[] series) =>
         _MatchSeries(source, series).ToList();
 
     /// <summary>
@@ -58,7 +58,7 @@ public abstract class NonTerminal
     /// <param name="source">Stream from which tokens are consumed.</param>
     /// <param name="options">Possible next non-terminals to try matching.</param>
     /// <returns>Resulting DTO from any successfully matched member.</returns>
-    protected object? MatchOptions(TokenStream source, params NonTerminal[] options)
+    protected object MatchOptions(TokenStream source, params NonTerminal[] options)
     {
         var restorePoint = source.Offset;
         foreach (var nonTerm in options)
@@ -84,9 +84,9 @@ public abstract class NonTerminal
 /// <typeparam name="T">DTO type corresponding to parsed out details.</typeparam>
 public abstract class NonTerminal<T> : NonTerminal where T : class
 {
-    override public bool TryMatch(TokenStream source, out object? dto)
+    override public bool TryMatch(TokenStream source, out object dto)
     {
-        var result = TryMatch(source, out T? _dto);
+        var result = TryMatch(source, out T _dto);
         dto = _dto;
         return result;
     }
@@ -99,5 +99,5 @@ public abstract class NonTerminal<T> : NonTerminal where T : class
     /// <param name="source">Stream from which tokens are consumed.</param>
     /// <param name="dto">Object in which text literal details can be placed.</param>
     /// <returns>Whether the syntax was matched in a valid fashion.</returns>
-    public abstract bool TryMatch(TokenStream source, out T? dto);
+    public abstract bool TryMatch(TokenStream source, out T dto);
 }

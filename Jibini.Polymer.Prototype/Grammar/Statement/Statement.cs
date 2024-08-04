@@ -12,7 +12,7 @@ public abstract class StatementDto
 
 public class Statement : NonTerminal<StatementDto>
 {
-    override public bool TryMatch(TokenStream source, out StatementDto? dto)
+    override public bool TryMatch(TokenStream source, out StatementDto dto)
     {
         dto  = MatchOptions(source,
             new Function(),
@@ -30,18 +30,11 @@ public class Statement : NonTerminal<StatementDto>
     }
 }
 
-public class Statements : NonTerminal<List<StatementDto>>
+public class Statements(Token? endToken) : NonTerminal<List<StatementDto>>
 {
-    private readonly Token? endToken;
-
-    public Statements(Token? endToken)
+    override public bool TryMatch(TokenStream source, out List<StatementDto> dto)
     {
-        this.endToken = endToken;
-    }
-
-    override public bool TryMatch(TokenStream source, out List<StatementDto>? dto)
-    {
-        dto = new();
+        dto = [];
         // Cascaded value should help protect against polling EOF
         while (/*Valid && */(source.Next ?? endToken) != endToken)
         {

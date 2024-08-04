@@ -18,7 +18,7 @@ public class NumberDto : ExpressionDto
     {
         var numberText = source.Text.TrimEnd('f', 'd', 'L');
         Value = decimal.Parse(numberText);
-        Suffix = source.Text.Substring(numberText.Length);
+        Suffix = source.Text[numberText.Length..];
     }
 }
 
@@ -28,7 +28,7 @@ public class Number : Terminal<NumberDto>
     {
     }
 
-    public override bool TryMatch(TokenStream source, out NumberDto? dto)
+    public override bool TryMatch(TokenStream source, out NumberDto dto)
     {
         try
         {

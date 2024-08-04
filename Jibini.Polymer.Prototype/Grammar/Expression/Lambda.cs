@@ -9,17 +9,17 @@ public class LambdaDto : ExpressionDto
 {
     public override string _Type => "Lambda";
 
-    public List<TypeDto>? TypeParams { get; set; }
-    public List<ParameterDto> Parameters { get; set; } = new();
-    public TypeDto? ReturnType { get; set; }
+    public List<TypeDto> TypeParams { get; set; }
+    public List<ParameterDto> Parameters { get; set; } = [];
+    public TypeDto ReturnType { get; set; }
     public BodyDto Body { get; set; } = new();
 }
 
 public class Lambda : NonTerminal<LambdaDto>
 {
-    override public bool TryMatch(TokenStream source, out LambdaDto? dto)
+    override public bool TryMatch(TokenStream source, out LambdaDto dto)
     {
-        IList<object?> data;
+        IList<object> data;
         dto = new();
         if (source.Next == Lt)
         {
@@ -28,7 +28,7 @@ public class Lambda : NonTerminal<LambdaDto>
         }
 
         data = MatchSeries(source, new Parameters());
-        dto.Parameters = (data[0] as List<ParameterDto>)!;
+        dto.Parameters = data[0] as List<ParameterDto>;
 
         if (source.Next == Colon)
         {
@@ -41,7 +41,7 @@ public class Lambda : NonTerminal<LambdaDto>
         data = MatchSeries(source,
             Arrow, new Body()
             );
-        dto.Body = (data[1] as BodyDto)!;
+        dto.Body = data[1] as BodyDto;
         return Valid;
     }
 }

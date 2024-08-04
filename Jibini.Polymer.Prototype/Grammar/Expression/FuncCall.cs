@@ -9,13 +9,13 @@ public class FuncCallDto : ExpressionDto
 {
     public override string _Type => "FuncCall";
 
-    public ExpressionDto? Target { get; set; }
-    public List<ExpressionDto> Args { get; set; } = new();
+    public ExpressionDto Target { get; set; }
+    public List<ExpressionDto> Args { get; set; } = [];
 }
 
 public class FuncCall : NonTerminal<FuncCallDto>
 {
-    override public bool TryMatch(TokenStream source, out FuncCallDto? dto)
+    override public bool TryMatch(TokenStream source, out FuncCallDto dto)
     {
         dto = new();
         _ = MatchSeries(source, LParens);
@@ -25,7 +25,7 @@ public class FuncCall : NonTerminal<FuncCallDto>
             var expr = MatchOptions(source, new Expression());
             if (expr is not null)
             {
-                dto.Args.Add((expr as ExpressionDto)!);
+                dto.Args.Add(expr as ExpressionDto);
             }
 
             if (source.Next != RParens)

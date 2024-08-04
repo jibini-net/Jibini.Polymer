@@ -13,12 +13,12 @@ public class TypeDto
 
 public class Type : NonTerminal<TypeDto>
 {
-    override public bool TryMatch(TokenStream source, out TypeDto? dto)
+    override public bool TryMatch(TokenStream source, out TypeDto dto)
     {
         var data = MatchSeries(source, new Ident());
         dto = new()
         {
-            Name = (data[0] as IdentDto)!
+            Name = data[0] as IdentDto
         };
 
         for (; source.Next == Mult; MatchSeries(source, Mult), dto.PointerDepth++);

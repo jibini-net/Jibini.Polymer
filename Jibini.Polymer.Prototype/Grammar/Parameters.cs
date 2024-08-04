@@ -13,9 +13,9 @@ public class ParameterDto
 
 public class Parameters : NonTerminal<List<ParameterDto>>
 {
-    override public bool TryMatch(TokenStream source, out List<ParameterDto>? dto)
+    override public bool TryMatch(TokenStream source, out List<ParameterDto> dto)
     {
-        dto = new();
+        dto = [];
         _ = MatchSeries(source, LParens);
 
         while (Valid && source.Next != RParens)
@@ -25,8 +25,8 @@ public class Parameters : NonTerminal<List<ParameterDto>>
                 );
             dto.Add(new()
             {
-                Name = (data[0] as IdentDto)!,
-                Type = (data[2] as TypeDto)!
+                Name = data[0] as IdentDto,
+                Type = data[2] as TypeDto
             });
 
             if (source.Next != RParens)
