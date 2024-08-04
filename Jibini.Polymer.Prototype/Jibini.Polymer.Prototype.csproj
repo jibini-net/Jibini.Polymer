@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
@@ -8,7 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SourceGeneration\SourceGenerator\SourceGenerator.csproj" />
+    <Compile Include="..\SourceGeneration\SourceGenerator\Fsa.Builder.cs" Link="Fsa\Fsa.Builder.cs" />
+    <Compile Include="..\SourceGeneration\SourceGenerator\Fsa.CommonMatcher.cs" Link="Fsa\Fsa.CommonMatcher.cs" />
+    <Compile Include="..\SourceGeneration\SourceGenerator\Fsa.cs" Link="Fsa\Fsa.cs" />
+    <Compile Include="..\SourceGeneration\SourceGenerator\Fsa.Extensions.cs" Link="Fsa\Fsa.Extensions.cs" />
+    <Compile Include="..\SourceGeneration\SourceGenerator\Fsa.Minimize.cs" Link="Fsa\Fsa.Minimize.cs" />
+    <Compile Include="..\SourceGeneration\SourceGenerator\Fsa.Search.cs" Link="Fsa\Fsa.Search.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Fsa\" />
   </ItemGroup>
 
 </Project>

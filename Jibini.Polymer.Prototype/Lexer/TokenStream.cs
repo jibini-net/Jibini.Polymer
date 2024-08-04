@@ -21,7 +21,7 @@ public class TokenMatch
 /// Scans an in-memory text buffer for token matches, matching one token at a
 /// time as enums.
 /// </summary>
-public class TokenStream
+public class TokenStream(string source)
 {
     /// <summary>
     /// Allows a string to be used automatically as a "token stream."
@@ -30,13 +30,11 @@ public class TokenStream
     public static implicit operator TokenStream(string sourceText) =>
         new(sourceText);
 
-    // In-memory copy of source which will be parsed
-    private readonly string source;
     /// <summary>
     /// Provides access to a substring of remaining source, primarily for
     /// debugging purposes.
     /// </summary>
-    public string Remaining => source.Substring(Offset);
+    public string Remaining => source[Offset..];
 
     private int offset = 0;
     /// <summary>
@@ -56,7 +54,7 @@ public class TokenStream
     // Stores the last peeked token to only peek once
     private Token? token;
     // Previous tokens, allowing source to be mapped to the AST
-    public List<TokenMatch> SourceMap { get; set; } = new();
+    public List<TokenMatch> SourceMap { get; set; } = [];
 
     private string? _Text;
     /// <summary>
@@ -70,7 +68,7 @@ public class TokenStream
     /// </summary>
     public bool SkipDiscard { get; set; } = true;
 
-    private static Fsa fsa = new();
+    private static readonly Fsa fsa = new();
 
     static TokenStream()
     {
@@ -85,11 +83,6 @@ public class TokenStream
         }
 
         fsa = fsa.ConvertToDfa().MinimizeDfa();
-    }
-
-    public TokenStream(string source)
-    {
-        this.source = source;
     }
 
     /// <summary>
@@ -133,7 +126,7 @@ public class TokenStream
             return this.token!.Value;
         }
 
-        throw new Exception("Unexpected content");
+        //throw new Exception("Unexpected content");
     }
 
     /// <summary>
